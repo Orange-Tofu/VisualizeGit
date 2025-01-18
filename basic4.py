@@ -2,7 +2,7 @@ import curses
 import threading
 import subprocess
 
-def part_a_animation(window, lock):
+def part_a_animation(window, lock, stop_event):
     """Display ASCII animation in Part A."""
     frames = [
         r"  (o_o) ",
@@ -10,15 +10,17 @@ def part_a_animation(window, lock):
         r"  (>_>) ",
     ]
     h, w = window.getmaxyx()
-    while True:
+    while not stop_event.is_set():
         for frame in frames:
+            if stop_event.is_set():
+                break
             with lock:
                 window.clear()
                 window.addstr(1, w // 2 - len(frame) // 2, frame)
                 window.refresh()
             curses.napms(500)  # 500ms delay
 
-def part_b_live_output(window, command, output_storage, lock):
+def part_b_live_output(window, command, output_storage, lock, stop_event):
     """Run a command and display live output in Part B while storing it."""
     h, w = window.getmaxyx()
     try:
@@ -54,6 +56,8 @@ def part_b_live_output(window, command, output_storage, lock):
             window.addstr(error_message)
             window.refresh()
         output_storage.append(error_message)
+    finally:
+        stop_event.set()  # Signal animation to stop
 
 def main(stdscr):
     curses.curs_set(0)  # Hide the cursor
@@ -77,25 +81,29 @@ def main(stdscr):
     # Lock for synchronizing window writes
     lock = threading.Lock()
     
+    # Event to signal when Part B is done
+    stop_event = threading.Event()
+    
     # Run Part A and Part B concurrently
-    t1 = threading.Thread(target=part_a_animation, args=(part_a, lock), daemon=True)
-    t2 = threading.Thread(target=part_b_live_output, args=(part_b, command, output_storage, lock))
+    t1 = threading.Thread(target=part_a_animation, args=(part_a, lock, stop_event), daemon=True)
+    t2 = threading.Thread(target=part_b_live_output, args=(part_b, command, output_storage, lock, stop_event))
     
     t1.start()
     t2.start()
     
     # Wait for Part B to finish
     t2.join()
+    t1.join()  # Wait for animation thread to finish
 
-    # Stop Part A animation and display stored output
-    curses.napms(2000)
-    with lock:
-        stdscr.clear()
-        stdscr.addstr("Command Output:\n\n")
-        for line in output_storage:
-            stdscr.addstr(line)
-        stdscr.refresh()
-    stdscr.getch()  # Wait for user input before exiting
+    # Display stored output after both parts are done
+    # stdscr.clear()
+    # stdscr.addstr("Command Output:\n\n")
+    # for line in output_storage:
+    #     stdscr.addstr(line)
+    # stdscr.refresh()
+    # stdscr.getch()  # Wait for user input before exiting
+    for line in output_storage:
+        print(line)
 
 if __name__ == "__main__":
     curses.wrapper(main)
