@@ -67,17 +67,18 @@ def main(stdscr):
     h, w = stdscr.getmaxyx()
     
     # Create windows for Part A and Part B
-    part_a_height = h // 2
+    part_a_height = h // 4
     part_a = stdscr.subwin(part_a_height, w, 0, 0)
     part_b = stdscr.subwin(h - part_a_height - 1, w, part_a_height + 1, 0)
     
     # Draw divider
     stdscr.hline(part_a_height, 0, "-", w)
     stdscr.refresh()
-    
+    command = "git push -v"
     # Replace with the actual command you want to run
     # command = "ping -c 5 google.com" if not subprocess.os.name == "nt" else "ping -n 5 google.com"
-    command = "git add ."
+    # command = "git commit -m \"kindof finally working\""
+
     
     # Storage for command output
     output_storage = []
@@ -101,7 +102,6 @@ def main(stdscr):
     
     for line in output_storage:
         sys.stdout.write(line)
-        sys.stdout.flush()
 
 if __name__ == "__main__":
     curses.wrapper(main)
