@@ -1,6 +1,9 @@
 import curses
 import threading
 import subprocess
+import time
+import sys
+import os
 
 def part_a_animation(window, lock, stop_event):
     """Display ASCII animation in Part A."""
@@ -73,7 +76,8 @@ def main(stdscr):
     stdscr.refresh()
     
     # Replace with the actual command you want to run
-    command = "ping -c 5 google.com" if not subprocess.os.name == "nt" else "ping -n 5 google.com"
+    # command = "ping -c 5 google.com" if not subprocess.os.name == "nt" else "ping -n 5 google.com"
+    command = "git add ."
     
     # Storage for command output
     output_storage = []
@@ -91,19 +95,13 @@ def main(stdscr):
     t1.start()
     t2.start()
     
-    # Wait for Part B to finish
     t2.join()
     t1.join()  # Wait for animation thread to finish
-
-    # Display stored output after both parts are done
-    # stdscr.clear()
-    # stdscr.addstr("Command Output:\n\n")
-    # for line in output_storage:
-    #     stdscr.addstr(line)
-    # stdscr.refresh()
-    # stdscr.getch()  # Wait for user input before exiting
+    time.sleep(2)
+    
     for line in output_storage:
-        print(line)
+        sys.stdout.write(line)
+        sys.stdout.flush()
 
 if __name__ == "__main__":
     curses.wrapper(main)
