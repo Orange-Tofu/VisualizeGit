@@ -8,11 +8,13 @@ class CommandRunner:
         self.queue = queue.Queue()
         self.proc = None
         self.thread = None
+        self.captured_lines = []
 
     def start(self):
-        def reader(proc, q):
+        def reader(proc, q, captured):
             for line in iter(proc.stdout.readline, ''):
                 q.put(line)
+                captured.append(line)
             proc.stdout.close()
 
         self.proc = subprocess.Popen(
@@ -23,7 +25,7 @@ class CommandRunner:
             text=True,   # decode as str automatically
         )
 
-        self.thread = threading.Thread(target=reader, args=(self.proc, self.queue), daemon=True)
+        self.thread = threading.Thread(target=reader, args=(self.proc, self.queue, self.captured_lines), daemon=True)
         self.thread.start()
 
     def poll_line(self):

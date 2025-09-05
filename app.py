@@ -51,7 +51,7 @@ def main(stdscr):
                 finished_at = time.time()
 
             # Exit if 2 minutes have passed after completion
-            if finished_at and time.time() - finished_at > 7:
+            if finished_at and time.time() - finished_at > 3:
                 break
 
             time.sleep(0.1)
@@ -59,5 +59,10 @@ def main(stdscr):
     except KeyboardInterrupt:
         pass
 
+    return runner.captured_lines
+
 if __name__ == "__main__":
-    curses.wrapper(main)
+    lines = curses.wrapper(main)
+
+    for line in lines:
+        print(line, end="")
