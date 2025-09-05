@@ -1,68 +1,68 @@
+import sys
 import curses
 import time
-import Animations.status as status
-from runner import CommandRunner
+from core.runner import CommandRunner
+from core.ui import split_screen
+import animations.status as status
+# future: import Animations.pull as pull, Animations.push as push, etc.
 
-def main(stdscr):
-    curses.curs_set(0)
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+COMMANDS = {
+    "status": status.render,
+    # "pull": pull.render,
+    # "push": push.render,
+}
 
-    height, width = stdscr.getmaxyx()
-    split_point = height // 3
+def main(stdscr, action, git_args):
+    top_window, bottom_window = split_screen(stdscr)
 
-    top_window = curses.newwin(split_point, width, 0, 0)
-    bottom_window = curses.newwin(height - split_point, width, split_point, 0)
-    bottom_window.scrollok(True)
-    bottom_window.idlok(True)
-
-    # Fake git data for top panel
-    data = {"untracked": 5, "changed": 3, "staged": 7, "commit": 2}
-
-    # Start command runner for bottom panel
-    runner = CommandRunner(["git", "pull"])
+    # Construct full git command
+    command = ["git", action] + git_args
+    runner = CommandRunner(command)
     runner.start()
 
+    # Example data dict (could be updated live from git output later)
+    data = {"untracked": 0, "changed": 0, "staged": 0, "commit": 0}
     y = 1
     finished_at = None
-    try:
-        while True:
-            # Update top visualization
-            # data["untracked"] += 1
-            status.render(top_window, data)
 
-            # Stream bottom output
+    while True:
+        # Call the relevant animation for the action
+        COMMANDS[action](top_window, data)
+
+        # Stream git output into bottom window
+        line = runner.poll_line()
+        while line:
+            max_y, max_x = bottom_window.getmaxyx()
+            if y >= max_y - 1:
+                bottom_window.scroll(1)
+                y = max_y - 2
+            bottom_window.addnstr(y, 2, line.rstrip(), max_x - 4)
+            y += 1
+            bottom_window.refresh()
             line = runner.poll_line()
-            while line:
-                max_y, max_x = bottom_window.getmaxyx()
-                if y >= max_y - 1:
-                    bottom_window.scroll(1)
-                    y = max_y - 2
-                bottom_window.addnstr(y, 2, line.rstrip(), max_x - 4)
-                y += 1
-                bottom_window.refresh()
-                line = runner.poll_line()
 
-            # If process is done, start countdown
-            if not runner.is_running() and finished_at is None:
-                finished_at = time.time()
+        # Grace period after process ends
+        if not runner.is_running() and finished_at is None:
+            finished_at = time.time()
+        if finished_at and time.time() - finished_at > 3:
+            break
 
-            # Exit if 2 minutes have passed after completion
-            if finished_at and time.time() - finished_at > 3:
-                break
-
-            time.sleep(0.1)
-
-    except KeyboardInterrupt:
-        pass
+        curses.napms(100)
 
     return runner.captured_lines
 
 if __name__ == "__main__":
-    lines = curses.wrapper(main)
+    if len(sys.argv) < 2:
+        print("Usage: python app.py <command> [git-options...]")
+        sys.exit(1)
 
+    action = sys.argv[1]
+    git_args = sys.argv[2:]
+
+    if action not in COMMANDS:
+        print(f"Unknown command: {action}")
+        sys.exit(1)
+
+    lines = curses.wrapper(main, action, git_args)
     for line in lines:
         print(line, end="")
