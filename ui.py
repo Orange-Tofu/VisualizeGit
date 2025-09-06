@@ -4,7 +4,7 @@ import curses
 def setup_windows(stdscr):
     curses.curs_set(0)
     height, width = stdscr.getmaxyx()
-    split_point = height // 3
+    split_point = (2 * height) // 5
 
     top_window = curses.newwin(split_point, width, 0, 0)
     bottom_window = curses.newwin(height - split_point, width, split_point, 0)
