@@ -1,6 +1,7 @@
 # animations/status.py
 import curses
 from animations.base import start_animation
+from core import ui_config as cfg
 
 def draw_box(win, y, x, color, title, symbols):
     """
@@ -38,23 +39,33 @@ def render(window, state):
     window.clear()
     window.box()
 
-    # Branch info at top
     window.addstr(1, 2, f"Branch: {state.branch}", curses.color_pair(4))
 
-    # Draw the four boxes (same style as your earlier code)
-    draw_box(window, 4, 5, 1, "Untracked",
-             [(3, 4, "•"), (3, 6, str(state.untracked))])
+    draw_box(
+        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["untracked"],
+        cfg.STATUS_COLORS["untracked"], "Untracked",
+        [(3, 4, "•"), (3, 6, str(state.untracked))]
+    )
 
-    draw_box(window, 4, 25, 2, "Changed",
-             [(3, 4, "+"), (3, 6, str(state.changed))])
+    draw_box(
+        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["changed"],
+        cfg.STATUS_COLORS["changed"], "Changed",
+        [(3, 4, "+"), (3, 6, str(state.changed))]
+    )
 
-    draw_box(window, 4, 45, 3, "Staged",
-             [(3, 4, "#"), (3, 6, str(state.staged))])
+    draw_box(
+        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["staged"],
+        cfg.STATUS_COLORS["staged"], "Staged",
+        [(3, 4, "#"), (3, 6, str(state.staged))]
+    )
 
-    draw_box(window, 4, 65, 4, "Committed",
-             [(3, 3, f"↑{state.ahead}"), (3, 9, f"↓{state.behind}")])
+    draw_box(
+        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["committed"],
+        cfg.STATUS_COLORS["committed"], "Committed",
+        [(3, 3, f"↑{state.ahead}"), (3, 9, f"↓{state.behind}")]
+    )
 
-    window.addstr(11, 66, "-1: No remote", curses.color_pair(4))
+    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] + 1, "-1: No remote", curses.color_pair(cfg.STATUS_COLORS["committed"]))
 
 def start(window, git_state):
     return start_animation(window, render, git_state)
