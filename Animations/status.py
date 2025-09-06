@@ -54,5 +54,7 @@ def render(window, state):
     draw_box(window, 4, 65, 4, "Committed",
              [(3, 3, f"↑{state.ahead}"), (3, 9, f"↓{state.behind}")])
 
+    window.addstr(11, 66, "-1: No remote", curses.color_pair(4))
+
 def start(window, git_state):
     return start_animation(window, render, git_state)
