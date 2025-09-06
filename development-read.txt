@@ -1,7 +1,7 @@
 Currently runner.py handles the actual code running, status.py is status and app.py handles the combined logic.
 Next todo:
  - Print the ouput of git program even after program exits. ✔
- - Modularize and finalize the folder structure. 
+ - Modularize and finalize the folder structure. ✔
  - For git status, implement end-to-end, as in:
     - Implement logic to receive command line arguments. ✔
     - Parse the command line arguments, and determine the command. ✔
