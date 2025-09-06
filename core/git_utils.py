@@ -16,10 +16,10 @@ def build_state(path="."):
 def get_ahead_behind(path="."):
     """
     Returns (ahead, behind) commit counts relative to remote.
-    If no remote or detached HEAD, returns (0, 0).
+    If no remote or detached HEAD, returns (-1, -1).
     """
     repo = Repo(path)
-    ahead = behind = 0
+    ahead = behind = -1
 
     try:
         tracking_branch = repo.active_branch.tracking_branch()
@@ -30,6 +30,6 @@ def get_ahead_behind(path="."):
             behind = sum(1 for _ in commits_behind)
     except Exception:
         # If detached HEAD, no upstream, etc.
-        ahead, behind = 0, 0
+        ahead, behind = -1, -1
 
     return ahead, behind
