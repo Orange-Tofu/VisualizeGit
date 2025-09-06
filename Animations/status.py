@@ -65,7 +65,7 @@ def render(window, state):
         [(3, 3, f"↑{state.ahead}"), (3, 9, f"↓{state.behind}")]
     )
 
-    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] + 1, "-1: No remote", curses.color_pair(cfg.STATUS_COLORS["committed"]))
+    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] + 1, "-1 = No remote", curses.color_pair(cfg.STATUS_COLORS["committed"]))
 
 def start(window, git_state):
     return start_animation(window, render, git_state)
