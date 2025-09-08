@@ -5,7 +5,18 @@ Next todo:
  - For git status, implement end-to-end, as in:
     - Implement logic to receive command line arguments. ✔
     - Parse the command line arguments, and determine the command. ✔
-    - Create utility classes to fetch required data based on commands.
-    - Based on the command determine logic to fetch the required, animation method.
-    - Pass the input to the method.
- - Implement the same for few of the other git functions
+    - Create utility classes to fetch required data based on commands. ✔
+    - Based on the command determine logic to fetch the required, animation method. ✔
+    - Pass the input to the method. [Moving to backlog]
+ 
+ - Next commands to complete:
+   - default
+   - pull
+   - fetch
+   - push
+   - add
+   - checkout
+   - commit 
+   - merge
+   - rebase
+   - log ?
