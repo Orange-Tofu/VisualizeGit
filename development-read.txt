@@ -10,7 +10,7 @@ Next todo:
     - Pass the input to the method. [Moving to backlog]
  
  - Next commands to complete:
-   - default
+   - default ✔
    - pull
    - fetch
    - push
@@ -19,4 +19,5 @@ Next todo:
    - commit 
    - merge
    - rebase
+   - remote
    - log ?
