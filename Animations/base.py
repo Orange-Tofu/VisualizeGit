@@ -1,6 +1,15 @@
 # animations/base.py
-import threading
-import time
+import threading, time
+
+class AnimationController:
+    def __init__(self, stop_event, thread):
+        self._stop_event = stop_event
+        self._thread = thread
+
+    def stop(self):
+        """Stop the animation and wait for thread to finish."""
+        self._stop_event.set()
+        self._thread.join()
 
 def start_animation(window, render_fn, git_state):
     stop_event = threading.Event()
@@ -14,4 +23,4 @@ def start_animation(window, render_fn, git_state):
 
     thread = threading.Thread(target=run, daemon=True)
     thread.start()
-    return stop_event, thread
+    return AnimationController(stop_event, thread)

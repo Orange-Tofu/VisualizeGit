@@ -12,11 +12,10 @@ def run(top_window, runner):
     git_state.ahead = ahead
     git_state.behind = behind
 
-    stop_event, anim_thread = status_anim.start(top_window, git_state)
+    controller = status_anim.start(top_window, git_state)
     runner.run_and_stream()
     time.sleep(5)
 
-    stop_event.set()
-    anim_thread.join()
+    controller.stop()
 
     print("\n".join(runner.get_output()))
