@@ -57,17 +57,17 @@ def render(window, state):
 
     # Draw Local branch (fixed small number of nodes, visually representing history)
     LOCAL_NODES = 4
-    _draw_commit_line(window, line_y, left_x, LOCAL_NODES, 1)
+    _draw_commit_line(window, line_y + 1, left_x + 5, LOCAL_NODES, 1)
     try:
-        window.addstr(line_y - 1, left_x, f"Local ({state.branch})", curses.color_pair(1))
+        window.addstr(line_y - 1, left_x, f"[Local] ({state.branch}):", curses.color_pair(1))
     except Exception:
         pass
 
     # Draw Remote-tracking (base nodes)
     base_remote_nodes = 3
-    _draw_commit_line(window, line_y, right_x, base_remote_nodes, 2)
+    _draw_commit_line(window, line_y + 1, right_x + 5, base_remote_nodes, 2)
     try:
-        window.addstr(line_y - 1, right_x, f"origin/{state.branch}", curses.color_pair(2))
+        window.addstr(line_y - 1, right_x, f"[Remote] origin/({state.branch}):", curses.color_pair(2))
     except Exception:
         pass
 
