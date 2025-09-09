@@ -33,3 +33,16 @@ def get_ahead_behind(path="."):
         ahead, behind = -1, -1
 
     return ahead, behind
+
+
+def get_remote_branch_name(branch):
+    """
+    Get the remote tracking branch name for the given local branch.
+    Returns e.g. 'origin/main' if tracking exists, else '<no remote>'.
+    """
+    repo = Repo(".")
+    try:
+        tracking_branch = repo.active_branch.tracking_branch()
+        return tracking_branch.name if tracking_branch else "<no remote>"
+    except Exception:
+        return "<no remote>"
