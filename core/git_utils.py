@@ -47,6 +47,7 @@ def get_remote_branch_name(branch):
     except Exception:
         return "<no remote>"
 
+
 def get_tracking_branch():
     repo = Repo(".")
     branch = repo.active_branch

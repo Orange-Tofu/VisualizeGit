@@ -128,10 +128,10 @@ def render(window, state):
 
         try:
             if fetched > 0:
-                msg1 = f"Fetched {fetched} new commit(s)."
+                msg1 = f"Fetched {fetched} new commit(s) for this branch."
             else:
-                msg1 = "No new commits fetched."
-            msg2 = "Commits fetched to remote-tracking ref, not merged into local branch."
+                msg1 = "No new commits fetched for this branch."
+            msg2 = "Commits fetched to remote-tracking refs, not merged into local branches ."
 
             # draw messages centered horizontally
             window.addstr(center_y, max(0, center_x - len(msg1)//2),

@@ -8,3 +8,6 @@ class GitState:
         self.branch = branch
         self.ahead = ahead
         self.behind = behind
+        self.commit_message = None
+        self.commit_hashes = []
+        self.commit_messages = []

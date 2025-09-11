@@ -1,13 +1,14 @@
 # app.py
 import argparse
 import ui
-from commands import status, fetch
+from commands import status, fetch, commit
 import core.ui_utils as ui_utils
 import curses
 
 SUPPORTED_COMMANDS = {
     "status": status.run,
     "fetch": fetch.run,
+    "commit": commit.run
 }
 
 def main(stdscr):
