@@ -43,7 +43,7 @@ def run(top_window, runner):
         runner.window.refresh()
         return
 
-    git_state.commit_message = commit_message or "Commit changes"
+    git_state.commit_message = commit_message or "New"
 
     # Preload last commits
     repo = Repo(".")

@@ -16,7 +16,7 @@ Next todo:
    - push
    - add
    - checkout
-   - commit 
+   - commit ✔
    - merge
    - rebase
    - remote
