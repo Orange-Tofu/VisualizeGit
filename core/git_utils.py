@@ -46,3 +46,11 @@ def get_remote_branch_name(branch):
         return tracking_branch.name if tracking_branch else "<no remote>"
     except Exception:
         return "<no remote>"
+
+def get_tracking_branch():
+    repo = Repo(".")
+    branch = repo.active_branch
+    tracking = branch.tracking_branch()
+    if tracking:
+        return tracking.name  # e.g. 'origin/main'
+    return None

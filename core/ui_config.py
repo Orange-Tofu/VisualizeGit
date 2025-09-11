@@ -20,8 +20,9 @@ STATUS_X_POSITIONS = {
 
 # Colors (curses color pairs)
 STATUS_COLORS = {
-    "untracked": 1,   # magenta
-    "changed": 2,     # red
-    "staged": 3,      # green
-    "committed": 4,   # yellow
+    "magenta": 1,   # magenta
+    "red": 2,     # red
+    "green": 3,      # green
+    "yellow": 4,   # yellow
+    "cyan": 5
 }

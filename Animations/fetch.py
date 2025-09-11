@@ -4,7 +4,9 @@ from animations.base import start_animation
 from core import ui_config as cfg
 
 COMMIT_CHAR = "●"
+FLYING_COMMIT_CHAR = "🢀"
 CONNECT = "─"
+
 
 def _draw_commit_line(win, y, x, n_commits, color_pair):
     """Draw a horizontal commit line starting at (y, x) with n_commits nodes."""
@@ -18,20 +20,15 @@ def _draw_commit_line(win, y, x, n_commits, color_pair):
         # ignore drawing errors if window too small
         pass
 
-def render(window, state):
-    """
-    Frame-by-frame renderer called repeatedly by animations.base.start_animation.
-    We rely on state._fetch_stage and state._fetch_frame to drive the animation.
-      - _fetch_stage: 'fetching' | 'done'
-      - _fetch_frame: integer frame counter
-    """
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)   # local branch
-    curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)    # remote-tracking
-    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # flying commits / highlight
-    curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_BLACK) # labels / notes
 
-    # Initialize animation state on the git_state object if missing
+def render(window, state):
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_CYAN, curses.COLOR_BLACK)
+
     if not hasattr(state, "_fetch_stage"):
         state._fetch_stage = "fetching"
     if not hasattr(state, "_fetch_frame"):
@@ -41,93 +38,129 @@ def render(window, state):
     window.clear()
     window.box()
 
-    # HEADLINE
     title = f"Fetch: {state.branch}"
-    subtitle = f"Remote-tracking: origin/{state.branch}"
+    tracking_name = getattr(state, "tracking_branch", None)
+    if tracking_name:
+        subtitle = f"Remote-tracking: {tracking_name}"
+    else:
+        subtitle = "No remote tracking branch"
     try:
-        window.addstr(1, max(2, (w - len(title)) // 2), title, curses.color_pair(4) | curses.A_BOLD)
-        window.addstr(2, max(2, (w - len(subtitle)) // 2), subtitle, curses.color_pair(4))
+        window.addstr(1, max(2, (w - len(title)) // 2), title,
+                      curses.color_pair(cfg.STATUS_COLORS["magenta"]) | curses.A_BOLD)
+        window.addstr(2, max(2, (w - len(subtitle)) // 2), subtitle,
+                      curses.color_pair(cfg.STATUS_COLORS["magenta"]))
     except Exception:
         pass
 
-    # Determine positions (use centralized config X positions when it makes sense)
-    left_x = cfg.STATUS_X_POSITIONS.get("untracked", 5)      # local branch area
-    right_x = cfg.STATUS_X_POSITIONS.get("committed", 65)    # remote-tracking area
+    left_x = cfg.STATUS_X_POSITIONS.get("untracked", 5)
+    right_x = cfg.STATUS_X_POSITIONS.get("committed", 65)
     line_y = cfg.ROW_Y + 2
 
-    # Draw Local branch (fixed small number of nodes, visually representing history)
+    # Draw static parts
     LOCAL_NODES = 4
-    _draw_commit_line(window, line_y + 1, left_x + 5, LOCAL_NODES, 1)
+    _draw_commit_line(window, line_y + 1, left_x + 5, LOCAL_NODES, cfg.STATUS_COLORS["green"])
     try:
-        window.addstr(line_y - 1, left_x, f"[Local] ({state.branch}):", curses.color_pair(1))
+        window.addstr(line_y - 1, left_x,
+                      f"[Local] ({state.branch}):",
+                      curses.color_pair(cfg.STATUS_COLORS["green"]))
     except Exception:
         pass
 
-    # Draw Remote-tracking (base nodes)
     base_remote_nodes = 3
-    _draw_commit_line(window, line_y + 1, right_x + 5, base_remote_nodes, 2)
+    _draw_commit_line(window, line_y + 1, right_x + 5, base_remote_nodes, cfg.STATUS_COLORS["cyan"])
     try:
-        window.addstr(line_y - 1, right_x, f"[Remote] origin/({state.branch}):", curses.color_pair(2))
+        window.addstr(line_y - 1, right_x,
+                      f"[Remote] origin/({state.branch}):",
+                      curses.color_pair(cfg.STATUS_COLORS["cyan"]))
     except Exception:
         pass
 
-    # Animation behavior:
-    # - while fetching (state._fetch_stage == 'fetching') => show a looping "flying commit" moving from remote cloud to remote-tracking
-    # - when done (state._fetch_stage == 'done') => show final remote-tracking line augmented with state.behind commits,
-    #   and show explanatory note that local is unchanged.
+    window.addstr(line_y + 5, left_x - 2, "Local Ref:", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
+    draw_box(window, line_y + 2, left_x + 8, 5, 9, cfg.STATUS_COLORS["yellow"], [(3, 4, "•")])
 
+       # ===================== ANIMATION =====================
     if state._fetch_stage == "fetching":
-        # continuously animate a flying commit from a 'remote cloud' toward the remote-tracking line.
-        # We compute a cycling position using _fetch_frame.
-        cycle = state._fetch_frame % 8  # 0..7
-        start_x = right_x + 14  # remote cloud source
-        target_base = right_x + base_remote_nodes * 4  # where new commits will appear
-        # computed flying x: move leftwards toward target_base
-        # interpolate between start_x and target_base
-        t = cycle / 8.0
-        fly_x = int(start_x - (start_x - target_base) * t)
+        # Head of [Remote] line (source)
+        remote_head_x = right_x + base_remote_nodes * 4
+        remote_head_y = line_y + 2
 
-        # draw a small "remote cloud" icon
-        cloud_x = start_x - 6
+        # Center of Local Ref box (destination)
+        box_center_x = left_x + 8 + 4  # x of box + half width
+        box_center_y = line_y + 2 + 4  # y of box + half height
+
+        total_steps = 12
+        step = state._fetch_frame % total_steps
+
+        # Interpolate between source and destination
+        fly_x = int(remote_head_x - (remote_head_x - box_center_x) * step / total_steps)
+        fly_y = int(remote_head_y - (remote_head_y - box_center_y) * step / total_steps)
+
         try:
-            window.addstr(line_y - 2, cloud_x, "[REMOTE]", curses.color_pair(2))
+            window.addstr(fly_y, fly_x, FLYING_COMMIT_CHAR,
+                          curses.color_pair(cfg.STATUS_COLORS["red"]) | curses.A_BOLD)
         except Exception:
             pass
 
-        # draw the flying commit
+        # Instruction note
+        note = "Fetching commits... remote data moving to Local Ref"
         try:
-            window.addstr(line_y - 1, fly_x, COMMIT_CHAR, curses.color_pair(3) | curses.A_BOLD)
+            window.addstr(line_y + 7, max(4, (w - len(note)) // 2), note,
+                          curses.color_pair(cfg.STATUS_COLORS["yellow"]))
         except Exception:
             pass
 
-        # small instruction text
-        note = "Fetching commits... remote-tracking refs updating (local branch unchanged)"
-        try:
-            window.addstr(line_y + 3, max(4, (w - len(note)) // 2), note, curses.color_pair(4))
-        except Exception:
-            pass
-
-        # advance frame counter for next render call
         state._fetch_frame += 1
+        if step == total_steps - 1:
+            # Once animation reaches end, switch stage to 'done'
+            state._fetch_stage = "done"
 
     elif state._fetch_stage == "done":
-        # show final remote-tracking commits based on state.behind
         fetched = int(getattr(state, "behind", 0))
-        # draw base + fetched commits
         total_remote_nodes = base_remote_nodes + max(0, fetched)
-        _draw_commit_line(window, line_y, right_x, total_remote_nodes, 2)
+        # _draw_commit_line(window, line_y, right_x, total_remote_nodes, 2)
 
-        # explanatory text
+        # compute screen center
+        h, w = window.getmaxyx()
+        center_y = h // 2 + 2   # slight below vertical center
+        center_x = w // 2
+
         try:
             if fetched > 0:
-                window.addstr(line_y + 2, left_x, f"Fetched {fetched} new commit(s).", curses.color_pair(2))
+                msg1 = f"Fetched {fetched} new commit(s)."
             else:
-                window.addstr(line_y + 2, left_x, "No new commits fetched.", curses.color_pair(1))
-            window.addstr(line_y + 4, left_x, "Local branch unchanged.", curses.color_pair(1))
+                msg1 = "No new commits fetched."
+            msg2 = "Local branch unchanged."
+
+            # draw messages centered horizontally
+            window.addstr(center_y, max(0, center_x - len(msg1)//2),
+                          msg1, curses.color_pair(2 if fetched > 0 else 1))
+            window.addstr(center_y + 1, max(0, center_x - len(msg2)//2),
+                          msg2, curses.color_pair(1))
         except Exception:
             pass
 
+
     window.refresh()
+
+
+def draw_box(win, y, x, height, width, color, symbols):
+    """
+    Draws an individual box with title and content.
+    """
+    win.attron(curses.color_pair(color))
+
+    # Box outline
+    win.addstr(y + 1, x, "┌" + "─" * (width - 2) + "┐")
+    for i in range(2, height):
+        win.addstr(y + i, x, "│" + " " * (width - 2) + "│")
+    win.addstr(y + height, x, "└" + "─" * (width - 2) + "┘")
+
+    # Symbols inside
+    for sy, sx, sym in symbols:
+        win.addstr(y + sy, x + sx, sym)
+
+    win.attroff(curses.color_pair(color))
+
 
 def start(window, git_state):
     """
