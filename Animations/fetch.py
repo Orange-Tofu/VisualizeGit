@@ -68,10 +68,12 @@ def render(window, state):
 
     base_remote_nodes = 3
     _draw_commit_line(window, line_y + 1, right_x + 5, base_remote_nodes, cfg.STATUS_COLORS["cyan"])
+    if tracking_name:
+        remote_label = f"[Remote] {tracking_name}:"
+    else:
+        remote_label = "[Remote]:"
     try:
-        window.addstr(line_y - 1, right_x,
-                      f"[Remote] origin/({state.branch}):",
-                      curses.color_pair(cfg.STATUS_COLORS["cyan"]))
+        window.addstr(line_y - 1, right_x, remote_label, curses.color_pair(cfg.STATUS_COLORS["cyan"]))
     except Exception:
         pass
 
@@ -88,7 +90,7 @@ def render(window, state):
         box_center_x = left_x + 8 + 4  # x of box + half width
         box_center_y = line_y + 2 + 4  # y of box + half height
 
-        total_steps = 12
+        total_steps = 10
         step = state._fetch_frame % total_steps
 
         # Interpolate between source and destination
@@ -129,13 +131,13 @@ def render(window, state):
                 msg1 = f"Fetched {fetched} new commit(s)."
             else:
                 msg1 = "No new commits fetched."
-            msg2 = "Local branch unchanged."
+            msg2 = "Commits fetched to remote-tracking ref, not merged into local branch."
 
             # draw messages centered horizontally
             window.addstr(center_y, max(0, center_x - len(msg1)//2),
                           msg1, curses.color_pair(2 if fetched > 0 else 1))
             window.addstr(center_y + 1, max(0, center_x - len(msg2)//2),
-                          msg2, curses.color_pair(1))
+                          msg2)
         except Exception:
             pass
 

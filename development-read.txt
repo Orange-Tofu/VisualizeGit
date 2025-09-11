@@ -12,7 +12,7 @@ Next todo:
  - Next commands to complete:
    - default ✔
    - pull
-   - fetch
+   - fetch ✔
    - push
    - add
    - checkout
