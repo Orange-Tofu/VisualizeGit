@@ -87,7 +87,7 @@ def _render_base(window, state):
         commits_x.append(x)
 
         msg_txt = (state.commit_messages[i] if hasattr(state, "commit_messages") and len(state.commit_messages) > i else "")
-        _draw_commit_node(window, x, y, chash, msg_txt, curses.color_pair(2), curses.color_pair(3))
+        _draw_commit(window, x, y, chash, msg_txt, curses.color_pair(2), curses.color_pair(3))
 
         # draw link to next commit
         if i < 2:

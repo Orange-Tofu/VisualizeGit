@@ -14,28 +14,35 @@ def run(top_window, runner):
     if "--amend" in user_cmd:
         if "--no-edit" in user_cmd:
             git_state.commit_type = "amend_no_edit"
-        elif "-m" in user_cmd or "--message" in cmd_args:
+        elif "-m" in user_cmd or "--message" in user_cmd:
             git_state.commit_type = "amend_with_m"
-            if "-m" in cmd_args:
-                m_index = cmd_args.index("-m")
-                if m_index + 1 < len(cmd_args):
-                    commit_message = cmd_args[m_index + 1]
-            elif "--message" in cmd_args:
-                m_index = cmd_args.index("--message")
-                if m_index + 1 < len(cmd_args):
-                    commit_message = cmd_args[m_index + 1]
+            if "-m" in user_cmd:
+                m_index = user_cmd.index("-m")
+                if m_index + 1 < len(user_cmd):
+                    commit_message = user_cmd[m_index + 1]
+            elif "--message" in user_cmd:
+                m_index = user_cmd.index("--message")
+                if m_index + 1 < len(user_cmd):
+                    commit_message = user_cmd[m_index + 1]
         else:
             runner.window.addstr(1, 2, "Interactive amend not supported")
             runner.window.refresh()
             return
-    elif "-m" in user_cmd:
-        git_state.commit_type = "commit_m"
+    elif "-m" in user_cmd or "--message" in user_cmd:
+            git_state.commit_type = "commit_m"
+            if "-m" in user_cmd:
+                m_index = user_cmd.index("-m")
+                if m_index + 1 < len(user_cmd):
+                    commit_message = user_cmd[m_index + 1]
+            elif "--message" in user_cmd:
+                m_index = user_cmd.index("--message")
+                if m_index + 1 < len(user_cmd):
+                    commit_message = user_cmd[m_index + 1]
     else:
         runner.window.addstr(1, 2, "Interactive commit not supported")
         runner.window.refresh()
         return
 
-    cmd_args = runner.cmd
     git_state.commit_message = commit_message or "Commit changes"
 
     # Preload last commits
