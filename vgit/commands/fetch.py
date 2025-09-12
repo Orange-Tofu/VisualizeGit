@@ -1,7 +1,7 @@
 # commands/fetch.py
 import time
-from core import git_utils
-from animations import fetch as fetch_anim
+from vgit.core import git_utils
+from vgit.animations import fetch as fetch_anim
 
 def run(top_window, runner):
     """

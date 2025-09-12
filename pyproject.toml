@@ -8,7 +8,8 @@ version = "0.1.0"
 description = "Educational Git Visualizer"
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "GPL-3.0-or-later"}
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 authors = [
     { name="Orange-Tofu", email="akshays@duck.com" }
 ]
@@ -30,7 +31,7 @@ dependencies = [
 ]
 
 [project.scripts]
-vgit = "vgit.cli:main"
+vgit = "vgit.__main__:main"
 
-[tool.setuptools]
-packages = ["vgit", "vgit.commands", "vgit.animations", "vgit.core", "vgit.ui"]
+[tool.setuptools.packages.find]
+where = ["."]

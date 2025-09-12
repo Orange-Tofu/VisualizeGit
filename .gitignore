@@ -1,4 +1,4 @@
 VirtualE/*
 __pycache__/
 **/debug.log
-ignorable/*
+*.egg-info/

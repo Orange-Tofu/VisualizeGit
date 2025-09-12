@@ -1,6 +1,6 @@
 import curses
 import sys
-from core import ui_config as cfg
+from vgit.core import ui_config as cfg
 
 def check_terminal_size(stdscr):
     """

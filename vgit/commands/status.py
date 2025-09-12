@@ -1,7 +1,7 @@
 # commands/status.py
 import time
-from core import git_utils
-from animations import status as status_anim
+from vgit.core import git_utils
+from vgit.animations import status as status_anim
 
 def run(top_window, runner):
     """

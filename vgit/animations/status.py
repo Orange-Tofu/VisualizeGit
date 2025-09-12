@@ -1,7 +1,7 @@
 # animations/status.py
 import curses
-from animations.base import start_animation
-from core import ui_config as cfg
+from vgit.animations.base import start_animation
+from vgit.core import ui_config as cfg
 
 def draw_box(win, y, x, color, title, symbols):
     """

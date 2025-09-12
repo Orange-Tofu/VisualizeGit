@@ -1,6 +1,6 @@
 # core/git_utils.py
 from git import Repo
-from core.git_model import GitState
+from vgit.core.git_model import GitState
 
 def build_state(path="."):
     repo = Repo(path)

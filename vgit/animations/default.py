@@ -1,7 +1,7 @@
 # animations/default.py
 import curses
-from animations.base import start_animation
-from core import ui_config as cfg
+from vgit.animations.base import start_animation
+from vgit.core import ui_config as cfg
 
 ROBOT_ASCII = """
    [◉_◉]   

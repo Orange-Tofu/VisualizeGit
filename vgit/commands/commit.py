@@ -1,6 +1,6 @@
 from git import Repo
-from core import git_utils as git_utils
-from animations import commit as commit_anim
+from vgit.core import git_utils as git_utils
+from vgit.animations import commit as commit_anim
 import time
 
 def run(top_window, runner):

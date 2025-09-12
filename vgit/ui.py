@@ -1,7 +1,7 @@
 # ui.py
 import curses
-from core.runner import CommandRunner
-import animations.default as default_animation
+from vgit.core.runner import CommandRunner
+import vgit.animations.default as default_animation
 import time
 
 def setup_windows(stdscr):
@@ -23,9 +23,8 @@ def start_curses(command_fn, full_command):
 
 
 def unsupported_command_animation(window, runner):
-    stop_event, anim_thread = default_animation.start(window)
+    controller = default_animation.start(window)
     runner.run_and_stream()
     time.sleep(5)
-    stop_event.set()
-    anim_thread.join()
+    controller.stop()
     print("\n".join(runner.get_output()))
