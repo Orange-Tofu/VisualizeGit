@@ -128,6 +128,7 @@ def render(window, state):
 
         try:
             if fetched > 0:
+
                 msg1 = f"Fetched {fetched} new commit(s) for this branch."
             else:
                 msg1 = "No new commits fetched for this branch."
