@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vgit"
+version = "0.1.0"
+description = "Educational Git Visualizer"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "GPL-3.0-or-later"}
+authors = [
+    { name="Orange-Tofu", email="akshays@duck.com" }
+]
+
+dependencies = [
+    "colorama==0.4.6",
+    "gitdb==4.0.12",
+    "GitPython==3.1.45",
+    "markdown-it-py==3.0.0",
+    "mdurl==0.1.2",
+    "Pygments==2.19.1",
+    "rich==13.9.4",
+    "smmap==5.0.2",
+    "termcolor==2.5.0",
+    "tqdm==4.67.1",
+
+    # Only install on Windows:
+    "windows-curses==2.4.0; platform_system == 'Windows'"
+]
+
+[project.scripts]
+vgit = "vgit.cli:main"
+
+[tool.setuptools]
+packages = ["vgit", "vgit.commands", "vgit.animations", "vgit.core", "vgit.ui"]
