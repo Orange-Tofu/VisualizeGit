@@ -14,12 +14,14 @@ def setup_windows(stdscr):
     return top_window, bottom_window
 
 
+
 def start_curses(command_fn, full_command):
     def wrapped(stdscr):
         top, bottom = setup_windows(stdscr)
         runner = CommandRunner(full_command, bottom)
         command_fn(top, runner)
     curses.wrapper(wrapped)
+
 
 
 def unsupported_command_animation(window, runner):
