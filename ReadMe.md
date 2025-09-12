@@ -25,7 +25,7 @@ pip install vgit
 Or, install from source:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/vgit.git
+git clone https://github.com/Orange-Tofu/VisualizeGit
 cd vgit
 pip install .
 ```
@@ -64,7 +64,7 @@ To set up vgit for development, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/vgit.git
+   git clone https://github.com/Orange-Tofu/VisualizeGit
    cd vgit
    ```
 2. Install dependencies:
