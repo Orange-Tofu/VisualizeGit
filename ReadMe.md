@@ -1,5 +1,6 @@
 # vgit – Visual Git Educational Tool
 
+
 ## License
 GPL-3.0-or-later
 
