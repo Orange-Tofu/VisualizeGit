@@ -4,6 +4,9 @@ from vgit.animations import status as status_anim
 from vgit.core.ui_utils import wait_for_button_press
 
 def run(top_window, runner):
+    """
+    Run the git status animation (top) while streaming the real command (bottom).
+    """
     git_state = git_utils.build_state()
     ahead, behind = git_utils.get_ahead_behind()
     git_state.ahead = ahead
