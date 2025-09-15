@@ -8,7 +8,7 @@ def check_terminal_size(stdscr):
     If not, exit gracefully with a friendly message.
     """
     rows, cols = stdscr.getmaxyx()
-    if rows < 20 or cols < 60:
+    if rows < 20 or cols < 80:
         curses.endwin()  # clean up curses before printing error
         print(
             f"❌ Terminal too small: {cols}x{rows} "

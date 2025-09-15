@@ -53,7 +53,7 @@ def render(window, state):
         pass
 
     left_x = cfg.STATUS_X_POSITIONS.get("untracked", 5)
-    right_x = cfg.STATUS_X_POSITIONS.get("committed", 65)
+    right_x = cfg.STATUS_X_POSITIONS.get("staged", 65)
     line_y = cfg.ROW_Y + 2
 
     # Draw static parts
@@ -77,8 +77,8 @@ def render(window, state):
     except Exception:
         pass
 
-    window.addstr(line_y + 5, left_x - 2, "Local Ref:", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
-    draw_box(window, line_y + 2, left_x + 8, 5, 9, cfg.STATUS_COLORS["yellow"], [(3, 4, "•")])
+    window.addstr(line_y + 1, left_x - 2, "Local Ref:", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
+    draw_box(window, line_y + 1, left_x + 8, 5, 9, cfg.STATUS_COLORS["yellow"], [(3, 4, "•")])
 
        # ===================== ANIMATION =====================
     if state._fetch_stage == "fetching":

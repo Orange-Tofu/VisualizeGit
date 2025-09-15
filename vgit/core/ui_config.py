@@ -25,10 +25,12 @@ def update_current_terminal_size(stdscr):
 BOX_HEIGHT = CURRENT_TERMINAL_HEIGHT//7
 BOX_WIDTH = CURRENT_TERMINAL_WIDTH//10
 ROW_Y = 3
-BOTTOM_ROW_TEXT_Y =10
 
 # X positions for git status boxes
 if CURRENT_TERMINAL_WIDTH>78:
+    SymbolPosX=2
+    BOTTOM_ROW_TEXT_Y =10
+    SymbolPosY=2
     STATUS_X_POSITIONS = {
     "untracked": (BOX_WIDTH),
     "changed": BOX_WIDTH+20 ,
@@ -36,6 +38,9 @@ if CURRENT_TERMINAL_WIDTH>78:
     "committed": BOX_WIDTH+60,
 }
 else:
+    SymbolPosX=3
+    BOTTOM_ROW_TEXT_Y =40
+    SymbolPosY=3
     STATUS_X_POSITIONS = {
     "untracked": (BOX_WIDTH),
     "changed": BOX_WIDTH+10 ,

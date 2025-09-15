@@ -44,28 +44,28 @@ def render(window, state):
     draw_box(
         window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["untracked"],
         cfg.STATUS_COLORS["magenta"], "Untracked",
-        [(3, 4, "•"), (3, 6, str(state.untracked))]
+        [(cfg.SymbolPosX, cfg.SymbolPosY, "•"), (cfg.SymbolPosX, 5, str(state.untracked))]
     )
 
     draw_box(
         window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["changed"],
         cfg.STATUS_COLORS["red"], "Changed",
-        [(3, 4, "+"), (3, 6, str(state.changed))]
+        [(cfg.SymbolPosX,cfg.SymbolPosY, "+"), (cfg.SymbolPosX, 5, str(state.changed))]
     )
 
     draw_box(
         window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["staged"],
         cfg.STATUS_COLORS["green"], "Staged",
-        [(3, 4, "#"), (3, 6, str(state.staged))]
+        [(cfg.SymbolPosX, cfg.SymbolPosY, "#"), (cfg.SymbolPosX, 5, str(state.staged))]
     )
 
     draw_box(
         window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["committed"],
         cfg.STATUS_COLORS["yellow"], "Committed",
-        [(3, 3, f"↑{state.ahead}"), (3, 6, f"↓{state.behind}")]
+        [(cfg.SymbolPosX, cfg.SymbolPosY, f"↑{state.ahead}"), (cfg.SymbolPosX, 5, f"↓{state.behind}")]
     )
 
-    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] , "-1 = No remote", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
+    window.addstr(cfg.BOTTOM_ROW_TEXT_Y-2, cfg.STATUS_X_POSITIONS["committed"]-3 , "-1 = No remote", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
 
 def start(window, git_state):
     return start_animation(window, render, git_state)
