@@ -26,7 +26,7 @@ Or, install from source:
 
 ```bash
 git clone https://github.com/Orange-Tofu/VisualizeGit
-cd vgit
+cd VisualizeGit
 pip install .
 ```
 
