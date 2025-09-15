@@ -22,12 +22,17 @@ def wait_for_button_press(window):
     """
     Wait for user to press SPACE or ENTER to continue.
     """
-    msg = "Press SPACE or ENTER to continue..."
-    h, w = window.getmaxyx()
-    window.addstr(h - 2, 2, msg) 
-    window.refresh()
 
     while True:
-        key = window.getch()
-        if key in (32, 10):  # SPACE=32, ENTER=10
-            break
+            msg = "Press SPACE or ENTER to continue..."
+            h, w = window.getmaxyx()
+
+            try:
+                window.addstr(h - 2, max(2, (w - len(msg)) // 2), msg)
+            except Exception:
+                pass
+
+            window.refresh()
+            key = window.getch()
+            if key in (32, 10):  # SPACE=32, ENTER=10
+                break

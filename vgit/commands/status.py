@@ -11,6 +11,6 @@ def run(top_window, runner):
 
     controller = status_anim.start(top_window, git_state)
     runner.run_and_stream()
-    wait_for_button_press(top_window)
     controller.stop()
+    wait_for_button_press(top_window)
     print("\n".join(runner.get_output()))
