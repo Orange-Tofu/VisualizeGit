@@ -1,7 +1,7 @@
-# commands/status.py
-import time
+
 from vgit.core import git_utils
 from vgit.animations import status as status_anim
+from vgit.core.ui_utils import wait_for_button_press
 
 def run(top_window, runner):
     """
@@ -14,8 +14,6 @@ def run(top_window, runner):
 
     controller = status_anim.start(top_window, git_state)
     runner.run_and_stream()
-    time.sleep(5)
-
     controller.stop()
-
+    wait_for_button_press(top_window)
     print("\n".join(runner.get_output()))
