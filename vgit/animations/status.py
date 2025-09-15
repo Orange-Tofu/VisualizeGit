@@ -8,7 +8,7 @@ def draw_box(win, y, x, color, title, symbols):
     Draws an individual box with title and content.
     """
     win.attron(curses.color_pair(color))
-    height, width = 6, 14
+    height, width = cfg.BOX_HEIGHT,cfg.BOX_WIDTH
 
     # Title centered
     win.addstr(y, x + (width - len(title)) // 2, title)
@@ -62,10 +62,10 @@ def render(window, state):
     draw_box(
         window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["committed"],
         cfg.STATUS_COLORS["yellow"], "Committed",
-        [(3, 3, f"↑{state.ahead}"), (3, 9, f"↓{state.behind}")]
+        [(3, 3, f"↑{state.ahead}"), (3, 6, f"↓{state.behind}")]
     )
 
-    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] + 1, "-1 = No remote", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
+    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] , "-1 = No remote", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
 
 def start(window, git_state):
     return start_animation(window, render, git_state)

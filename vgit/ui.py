@@ -9,16 +9,16 @@ def setup_windows(stdscr):
     height, width = stdscr.getmaxyx()
     split_point = (2 * height) // 5
 
-    top_window = curses.newwin(split_point, width, 0, 0)
-    bottom_window = curses.newwin(height - split_point, width, split_point, 0)
-    return top_window, bottom_window
+    top_window = curses.newwin(height, width, 0, 0)
+    # bottom_window = curses.newwin(height - split_point, width, split_point, 0)
+    return top_window
 
 
 
 def start_curses(command_fn, full_command):
     def wrapped(stdscr):
-        top, bottom = setup_windows(stdscr)
-        runner = CommandRunner(full_command, bottom)
+        top = setup_windows(stdscr)
+        runner = CommandRunner(full_command, top)
         command_fn(top, runner)
     curses.wrapper(wrapped)
 
