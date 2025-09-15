@@ -26,7 +26,7 @@ Or, install from source:
 
 ```bash
 git clone https://github.com/Orange-Tofu/VisualizeGit
-cd vgit
+cd VisualizeGit
 pip install .
 ```
 
@@ -71,8 +71,13 @@ To set up vgit for development, follow these steps:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run in development mode:
+3. To run your local changes, add this function in cli.py and run the below command as expected:
    ```bash
+   if __name__ == "__main__":
+    print("Reached here")
+    main()
+
+   Eg:
    python cli.py status
    ```
 4. Make your changes and test them live.
@@ -81,6 +86,7 @@ To set up vgit for development, follow these steps:
 # Contributing
 
 We welcome contributions! If you'd like to add new Git command animations, improve existing ones, or fix bugs, feel free to fork and submit a pull request.
+If you want to pick any issue add comments to the issue, and request you to start working on an issue only after its assigned to you to avoid duplicate efforts.
 
 ## Steps to Contribute
 

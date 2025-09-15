@@ -1,7 +1,7 @@
-# commands/status.py
-import time
+
 from vgit.core import git_utils
 from vgit.animations import status as status_anim
+from vgit.core.ui_utils import wait_for_button_press
 
 def run(top_window, runner):
     """
@@ -14,22 +14,8 @@ def run(top_window, runner):
 
     controller = status_anim.start(top_window, git_state)
     runner.run_and_stream()
-    # Wait until user presses SPACE/'q' to stop animation
-    try:
-        top_window.nodelay(True)
-        top_window.keypad(True)
-    except Exception:
-        pass
-    while True:
-        if controller.is_stopped():
-            break
-        try:
-            ch = top_window.getch()
-            if ch in (32, ord('q')):
-                controller.stop()
-                break
-        except Exception:
-            pass
-        time.sleep(0.05)
 
+    controller.stop()
+    wait_for_button_press(top_window)
     print("\n".join(runner.get_output()))
+

@@ -3,13 +3,14 @@
 import argparse
 import curses
 from vgit import ui
-from vgit.commands import status, fetch, commit
+from vgit.commands import status, fetch, commit, clone
 from vgit.core import ui_utils
 
 SUPPORTED_COMMANDS = {
     "status": status.run,
     "fetch": fetch.run,
-    "commit": commit.run
+    "commit": commit.run,
+    "clone": clone.run
 }
 
 def _run_curses(stdscr):
