@@ -27,6 +27,21 @@ def start_curses(command_fn, full_command):
 def unsupported_command_animation(window, runner):
     controller = default_animation.start(window)
     runner.run_and_stream()
-    time.sleep(5)
-    controller.stop()
+    # Wait until user presses SPACE/'q' to stop animation
+    try:
+        window.nodelay(True)
+        window.keypad(True)
+    except Exception:
+        pass
+    while True:
+        if controller.is_stopped():
+            break
+        try:
+            ch = window.getch()
+            if ch in (32, ord('q')):
+                controller.stop()
+                break
+        except Exception:
+            pass
+        time.sleep(0.05)
     print("\n".join(runner.get_output()))

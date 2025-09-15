@@ -11,6 +11,10 @@ class AnimationController:
         self._stop_event.set()
         self._thread.join()
 
+    def is_stopped(self):
+        """Return True if the animation has been requested to stop."""
+        return self._stop_event.is_set()
+
 def start_animation(window, render_fn, git_state):
     stop_event = threading.Event()
 

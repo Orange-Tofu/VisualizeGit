@@ -60,5 +60,21 @@ def run(top_window, runner):
     git_state.commit_hashes = [c.hexsha for c in reversed(last_commits)]
     git_state.commit_messages = [c.message.splitlines()[0] for c in reversed(last_commits)]
 
-    time.sleep(5)
+    # Wait until user presses SPACE/'q' to stop animation
+    try:
+        window.nodelay(True)
+        window.keypad(True)
+    except Exception:
+        pass
+    while True:
+        if controller.is_stopped():
+            break
+        try:
+            ch = window.getch()
+            if ch in (32, ord('q')):
+                controller.stop()
+                break
+        except Exception:
+            pass
+        time.sleep(0.05)
     controller.stop()
