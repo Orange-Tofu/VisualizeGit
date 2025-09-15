@@ -71,8 +71,13 @@ To set up vgit for development, follow these steps:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run in development mode:
+3. To run your local changes, add this function in cli.py and run the below command as expected:
    ```bash
+   if __name__ == "__main__":
+    print("Reached here")
+    main()
+
+   Eg:
    python cli.py status
    ```
 4. Make your changes and test them live.
