@@ -86,6 +86,7 @@ To set up vgit for development, follow these steps:
 # Contributing
 
 We welcome contributions! If you'd like to add new Git command animations, improve existing ones, or fix bugs, feel free to fork and submit a pull request.
+If you want to pick any issue add comments to the issue, and request you to start working on an issue only after its assigned to you to avoid duplicate efforts.
 
 ## Steps to Contribute
 
