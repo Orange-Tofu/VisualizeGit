@@ -62,8 +62,8 @@ def run(top_window, runner):
 
     # Wait until user presses SPACE/'q' to stop animation
     try:
-        window.nodelay(True)
-        window.keypad(True)
+        top_window.nodelay(True)
+        top_window.keypad(True)
     except Exception:
         pass
     while True:
