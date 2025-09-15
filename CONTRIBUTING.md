@@ -17,38 +17,39 @@ you grant the maintainers the right to relicense the project in the future if ne
 
 ---
 
-## 🚀 Pull Request Guidelines
+## Pull Request Guidelines
 
 To maintain a clean and consistent codebase, please follow these rules when raising a PR:
 
-### 🔹 Branch Naming
+### Branch Naming
 - Use meaningful branch names:
   - `feature/<short-description>` for new features
      eg. feature/GitPullAnimation
   - `fix/<short-description>` for bug fixes 
-     eg. fix/gitPullFrameSkipfixed
+     eg. fix/gitPullFrameSki
   - `docs/<short-description>` for documentation updates
 - Example: `feature/add-auth-api`
 
-### 🔹 Commit Messages
+### Commit Messages
 - Use clear, concise commit messages.
 - Prefer [Conventional Commits](https://www.conventionalcommits.org/) format:
   - `feat: add login API`
   - `fix: resolve null pointer exception`
   - `docs: update contribution guide`
 
-### 🔹 PR Description
+### PR Description
 - Clearly explain **what your PR does**.
 - Link related issues using GitHub keywords (e.g., `Closes #12`, `Fixes #45`).
 - Add screenshots or logs for UI/visual changes if applicable.
+- Make sure to put a PR request to the dev sprint branch 
 
-### 🔹 Checklist Before Submitting
+### Checklist Before Submitting
 - [ ] Code builds without errors  
 - [ ] Tests pass (if applicable)  
 - [ ] Documentation updated  
 - [ ] Issue linked in PR description  
 
-### 🔹 Review Process
+### Review Process
 - Keep PRs small and focused. Large PRs are harder to review.  
 - Be responsive to review feedback.  
 - Once approved, your PR will be merged into the main branch.  
