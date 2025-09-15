@@ -16,8 +16,22 @@ def run(top_window, runner):
 
     runner.run_and_stream()
     # Wait until user presses SPACE/'q' to stop animation
-    while not controller.is_stopped():
-        time.sleep(0.1)
+    try:
+        top_window.nodelay(True)
+        top_window.keypad(True)
+    except Exception:
+        pass
+    while True:
+        if controller.is_stopped():
+            break
+        try:
+            ch = top_window.getch()
+            if ch in (32, ord('q')):
+                controller.stop()
+                break
+        except Exception:
+            pass
+        time.sleep(0.05)
 
     controller.stop()
     print("\n".join(runner.get_output()))
