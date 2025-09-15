@@ -27,7 +27,7 @@ dependencies = [
     "tqdm==4.67.1",
 
     # Only install on Windows:
-    "windows-curses==2.4.0; platform_system == 'Windows'"
+    "windows-curses; platform_system == 'Windows'"
 ]
 
 [project.scripts]
