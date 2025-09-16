@@ -8,8 +8,7 @@ def check_terminal_size(stdscr):
     If not, exit gracefully with a friendly message.
     """
     rows, cols = stdscr.getmaxyx()
-
-    if rows < cfg.MIN_TERMINAL_HEIGHT or cols < cfg.MIN_TERMINAL_WIDTH:
+    if rows < 20 or cols < 80:
         curses.endwin()  # clean up curses before printing error
         print(
             f"❌ Terminal too small: {cols}x{rows} "
@@ -17,6 +16,7 @@ def check_terminal_size(stdscr):
             "👉 Please maximize your terminal and re-run."
         )
         sys.exit(1)
+
 
 def wait_for_button_press(window):
     """
