@@ -11,18 +11,19 @@
 > (triple `curses.wrapper`, thread safety, `windows-curses` dependency) — they vanish with the old framework.
 
 ### 1.1 Migrate TUI from `curses` to `rich`
-- [ ] Evaluate `rich.Live` + `rich.Layout` as replacement for manual curses split-screen
-- [ ] Replace `animations/base.py` animation loop with `rich.Live` context manager
-- [ ] Replace `core/runner.py` curses writes with `rich.Console` output
-- [ ] Update `ui.py` — replace `setup_windows()` and `start_curses()` with rich-based equivalents
-- [ ] Port `animations/status.py` to rich `Table` / `Panel` widgets
-- [ ] Port `animations/fetch.py` to rich
-- [ ] Port `animations/commit.py` to rich
-- [ ] Port `animations/default.py` to rich
-- [ ] Remove `windows-curses` dependency
-- [ ] Remove `curses` imports from all modules
-- [ ] Verify on Windows, macOS, and Linux terminals
-- [ ] Update `ui_config.py` — replace curses color pairs with rich style strings
+- [x] Evaluate `rich.Live` + `rich.Layout` as replacement for manual curses split-screen
+- [x] Replace `animations/base.py` animation loop with `rich.Live` context manager
+- [x] Replace `core/runner.py` curses writes with `rich.Console` output
+- [x] Update `ui.py` — replace `setup_windows()` and `start_curses()` with rich-based equivalents
+- [x] Port `animations/status.py` to rich `Table` / `Panel` widgets
+- [x] Port `animations/fetch.py` to rich
+- [x] Port `animations/commit.py` to rich
+- [x] Port `animations/default.py` to rich
+- [x] Remove `windows-curses` dependency
+- [x] Remove `curses` imports from all modules
+- [x] Verify on Windows.
+- [x] Update `ui_config.py` — replace curses color pairs with rich style strings
+
 
 ### 1.2 Migrate from threads to `asyncio`
 - [ ] Convert `CommandRunner.run_and_stream()` to use `asyncio.create_subprocess_exec`

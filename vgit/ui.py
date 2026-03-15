@@ -1,32 +1,33 @@
 # ui.py
-import curses
 from vgit.core.runner import CommandRunner
 import vgit.animations.default as default_animation
 import time
+from rich.console import Console
+from rich.layout import Layout
+from rich.live import Live
+from rich.panel import Panel
+from rich.text import Text
 
-def setup_windows(stdscr):
-    curses.curs_set(0)
-    height, width = stdscr.getmaxyx()
-    split_point = (2 * height) // 5
+def setup_layout():
+    layout = Layout()
+    layout.split_column(
+        Layout(name="top", ratio=2),
+        Layout(name="bottom", ratio=3)
+    )
+    return layout
 
-    top_window = curses.newwin(split_point, width, 0, 0)
-    bottom_window = curses.newwin(height - split_point, width, split_point, 0)
-    return top_window, bottom_window
+def start_ui(command_fn, full_command):
+    console = Console()
+    layout = setup_layout()
+    runner = CommandRunner(full_command, layout["bottom"])
+    
+    with Live(layout, console=console, refresh_per_second=10, screen=True) as live:
+        command_fn(layout["top"], runner)
 
-
-
-def start_curses(command_fn, full_command):
-    def wrapped(stdscr):
-        top, bottom = setup_windows(stdscr)
-        runner = CommandRunner(full_command, bottom)
-        command_fn(top, runner)
-    curses.wrapper(wrapped)
-
-
-
-def unsupported_command_animation(window, runner):
-    controller = default_animation.start(window)
+def unsupported_command_animation(top_layout, runner):
+    controller = default_animation.start(top_layout)
     runner.run_and_stream()
     time.sleep(5)
     controller.stop()
     print("\n".join(runner.get_output()))
+

@@ -1,71 +1,40 @@
 # animations/status.py
-import curses
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
+from rich.align import Align
+from rich.console import Group
+
 from vgit.animations.base import start_animation
-from vgit.core import ui_config as cfg
 
-def draw_box(win, y, x, color, title, symbols):
-    """
-    Draws an individual box with title and content.
-    """
-    win.attron(curses.color_pair(color))
-    height, width = 6, 14
-
-    # Title centered
-    win.addstr(y, x + (width - len(title)) // 2, title)
-
-    # Box outline
-    win.addstr(y + 1, x, "┌" + "─" * (width - 2) + "┐")
-    for i in range(2, height):
-        win.addstr(y + i, x, "│" + " " * (width - 2) + "│")
-    win.addstr(y + height, x, "└" + "─" * (width - 2) + "┘")
-
-    # Symbols inside
-    for sy, sx, sym in symbols:
-        win.addstr(y + sy, x + sx, sym)
-
-    win.attroff(curses.color_pair(color))
-
-def render(window, state):
-    """
-    Render git status visualization using boxes.
-    """
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-
-    # Clear and draw border for top window
-    window.clear()
-    window.box()
-
-    window.addstr(1, 2, f"Branch: {state.branch}", curses.color_pair(4))
-
-    draw_box(
-        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["untracked"],
-        cfg.STATUS_COLORS["magenta"], "Untracked",
-        [(3, 4, "•"), (3, 6, str(state.untracked))]
+def render(state):
+    table = Table(show_header=False, show_edge=False, padding=(1, 2))
+    table.add_column("untracked", justify="center")
+    table.add_column("changed", justify="center")
+    table.add_column("staged", justify="center")
+    table.add_column("committed", justify="center")
+    
+    untracked_panel = Panel(f"• {state.untracked}", title="Untracked", border_style="magenta", expand=False)
+    changed_panel = Panel(f"+ {state.changed}", title="Changed", border_style="red", expand=False)
+    staged_panel = Panel(f"# {state.staged}", title="Staged", border_style="green", expand=False)
+    committed_panel = Panel(f"↑{state.ahead}   ↓{state.behind}", title="Committed", border_style="yellow", expand=False)
+    
+    table.add_row(untracked_panel, changed_panel, staged_panel, committed_panel)
+    
+    branch_text = Text(f"Branch: {state.branch}", style="bold yellow")
+    note_text = Text("-1 = No remote", style="yellow")
+    
+    return Panel(
+        Group(
+            branch_text,
+            "",
+            Align.center(table),
+            "",
+            Align.center(note_text)
+        ),
+        title="Git Status Visualization",
+        border_style="blue"
     )
 
-    draw_box(
-        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["changed"],
-        cfg.STATUS_COLORS["red"], "Changed",
-        [(3, 4, "+"), (3, 6, str(state.changed))]
-    )
-
-    draw_box(
-        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["staged"],
-        cfg.STATUS_COLORS["green"], "Staged",
-        [(3, 4, "#"), (3, 6, str(state.staged))]
-    )
-
-    draw_box(
-        window, cfg.ROW_Y, cfg.STATUS_X_POSITIONS["committed"],
-        cfg.STATUS_COLORS["yellow"], "Committed",
-        [(3, 3, f"↑{state.ahead}"), (3, 9, f"↓{state.behind}")]
-    )
-
-    window.addstr(cfg.BOTTOM_ROW_TEXT_Y, cfg.STATUS_X_POSITIONS["committed"] + 1, "-1 = No remote", curses.color_pair(cfg.STATUS_COLORS["yellow"]))
-
-def start(window, git_state):
-    return start_animation(window, render, git_state)
+def start(layout_pane, git_state):
+    return start_animation(layout_pane, render, git_state)

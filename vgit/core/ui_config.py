@@ -18,11 +18,11 @@ STATUS_X_POSITIONS = {
     "committed": 65,
 }
 
-# Colors (curses color pairs)
+# Colors (rich styles)
 STATUS_COLORS = {
-    "magenta": 1,   # magenta
-    "red": 2,     # red
-    "green": 3,      # green
-    "yellow": 4,   # yellow
-    "cyan": 5
+    "magenta": "magenta",
+    "red": "red",
+    "green": "green",
+    "yellow": "yellow",
+    "cyan": "cyan"
 }

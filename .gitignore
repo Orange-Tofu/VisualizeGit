@@ -2,3 +2,4 @@ VirtualE/*
 __pycache__/
 **/debug.log
 *.egg-info/
+.venv/*
