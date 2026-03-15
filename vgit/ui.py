@@ -23,11 +23,13 @@ def start_ui(command_fn, full_command):
     
     with Live(layout, console=console, refresh_per_second=10, screen=True) as live:
         command_fn(layout["top"], runner)
+        
+    print("\n".join(runner.get_output()))
 
 def unsupported_command_animation(top_layout, runner):
     controller = default_animation.start(top_layout)
     runner.run_and_stream()
     time.sleep(5)
     controller.stop()
-    print("\n".join(runner.get_output()))
+
 

@@ -17,5 +17,3 @@ def run(top_window, runner):
     time.sleep(5)
 
     controller.stop()
-
-    print("\n".join(runner.get_output()))
