@@ -19,10 +19,11 @@ dependencies = [
     "GitPython==3.1.45",
     "rich==13.9.4",
     "smmap==5.0.2",
+    "click",
 ]
 
 [project.scripts]
 vgit = "vgit.__main__:main"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["."]

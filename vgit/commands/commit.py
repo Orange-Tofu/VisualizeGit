@@ -1,17 +1,18 @@
 import asyncio
 from git import Repo
-from vgit.core import git_utils as git_utils
+from vgit.core import git_utils
 from vgit.animations import commit as commit_anim
 from rich.panel import Panel
 from rich.text import Text
 
-async def run(top_window, runner):
+async def run(top_window, runner, speed='normal'):
     """
     Handle git commit animation & execution.
     """
     user_cmd = runner.cmd  # full command list, e.g. ['git','commit','-m','msg']
     commit_message = ""
     git_state = git_utils.build_state()
+    git_state.speed = speed
 
     if "--amend" in user_cmd:
         if "--no-edit" in user_cmd:
@@ -60,5 +61,6 @@ async def run(top_window, runner):
     git_state.commit_hashes = [c.hexsha for c in reversed(last_commits)]
     git_state.commit_messages = [c.message.splitlines()[0] for c in reversed(last_commits)]
 
-    await asyncio.sleep(4)
+    pause = 4.0 if speed == 'normal' else (2.0 if speed == 'fast' else 8.0)
+    await asyncio.sleep(pause)
     await controller.stop()

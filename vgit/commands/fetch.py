@@ -3,7 +3,7 @@ import asyncio
 from vgit.core import git_utils
 from vgit.animations import fetch as fetch_anim
 
-async def run(top_window, runner):
+async def run(top_window, runner, speed='normal'):
     """
     Run git fetch animation + actual command execution.
     """
@@ -11,6 +11,7 @@ async def run(top_window, runner):
     # For fetch, we need local + remote branch name
     git_state.remote_branch = git_utils.get_remote_branch_name(git_state.branch)
     git_state.tracking_branch = git_utils.get_tracking_branch()
+    git_state.speed = speed
 
     controller = fetch_anim.start(top_window, git_state)
 
@@ -19,6 +20,7 @@ async def run(top_window, runner):
     while getattr(git_state, "_fetch_stage", "") != "done" and (asyncio.get_event_loop().time() - wait_start) < 5.0:
         await asyncio.sleep(0.1)
 
-    await asyncio.sleep(2)
+    pause = 2.0 if speed == 'normal' else (1.0 if speed == 'fast' else 4.0)
+    await asyncio.sleep(pause)
 
     await controller.stop()

@@ -14,22 +14,27 @@ def setup_layout():
     )
     return layout
 
-async def start_ui(command_fn, full_command):
+async def start_ui(command_fn, full_command, speed='normal'):
     console = Console()
     layout = setup_layout()
     runner = CommandRunner(full_command, layout["bottom"])
     
     with Live(layout, console=console, refresh_per_second=10, screen=True) as live:
-        await command_fn(layout["top"], runner)
+        await command_fn(layout["top"], runner, speed=speed)
         
     print("\n".join(runner.get_output()))
 
-async def unsupported_command_animation(top_layout, runner):
-    controller = default_animation.start(top_layout)
+async def unsupported_command_animation(top_layout, runner, speed='normal'):
+    # default animation needs a state with speed if we want it respects speed
+    from vgit.core.git_model import GitState
+    dummy_state = GitState(0, 0, 0, "HEAD") # minimal dummy state
+    dummy_state.speed = speed
+    
+    controller = default_animation.start(top_layout, dummy_state)
     await runner.run_and_stream()
-    await asyncio.sleep(3)
+    
+    pause = 3.0 if speed == 'normal' else (1.5 if speed == 'fast' else 6.0)
+    await asyncio.sleep(pause)
     await controller.stop()
-
-
 
 

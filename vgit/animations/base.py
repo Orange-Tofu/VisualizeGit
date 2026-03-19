@@ -19,16 +19,19 @@ def start_animation(layout_pane, render_fn, git_state):
     Start the animation loop as an asyncio Task.
     """
     async def run():
+        SPEED_MAP = {'fast': 0.05, 'normal': 0.1, 'slow': 0.3}
+        delay = SPEED_MAP.get(getattr(git_state, 'speed', 'normal'), 0.1)
         try:
             while True:
                 # render_fn now returns a rich renderable (e.g. Panel, Group, Table)
                 renderable = render_fn(git_state)
                 if renderable:
                     layout_pane.update(renderable)
-                await asyncio.sleep(0.1)  # Faster frame rate for smoother animation
+                await asyncio.sleep(delay)
         except asyncio.CancelledError:
             # Handle cancellation gracefully
             pass
+
 
     task = asyncio.create_task(run())
     return AnimationController(task)

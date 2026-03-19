@@ -35,14 +35,13 @@
 
 
 ### 1.3 Migrate from `argparse` to `click` or `typer`
-- [ ] Choose between `click` (mature, explicit) and `typer` (type-hint driven, built on click)
-- [ ] Create a CLI group: `vgit` as the top-level command
-- [ ] Register each supported command as a subcommand with proper `--help`
-- [ ] Support pass-through of unknown flags to the underlying `git` command
-- [ ] Add `--no-animation` flag for CI/scripting use
-- [ ] Add `--speed` option (`fast` / `normal` / `slow`)
-- [ ] Remove `argparse` from `cli.py`
-- [ ] Ensure arg parsing happens *before* TUI init (clean `--help` and error output)
+- [x] Choose between `click` (mature, explicit) and `typer` (type-hint driven, built on click)
+- [x] Create a CLI group: `vgit` as the top-level command
+- [x] Register each supported command
+- [x] Support pass-through of unknown flags to the underlying `git` command
+- [x] Add `--speed` option (`fast` / `normal` / `slow`)
+- [x] Remove `argparse` from `cli.py`
+- [x] Ensure arg parsing happens *before* TUI init (clean `--help` and error output)
 
 ### 1.4 Clean up dependencies
 - [ ] Remove `colorama` from `pyproject.toml` and `requirements.txt`

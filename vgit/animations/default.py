@@ -23,5 +23,6 @@ def render(_state=None):
     )
     return Panel(Align.center(text), border_style="red", title="Not Supported")
 
-def start(layout_pane, _git_state=None):
-    return start_animation(layout_pane, render, None)
+def start(layout_pane, git_state=None):
+    return start_animation(layout_pane, render, git_state)
+
