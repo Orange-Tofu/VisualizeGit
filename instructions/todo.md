@@ -44,15 +44,16 @@
 - [x] Ensure arg parsing happens *before* TUI init (clean `--help` and error output)
 
 ### 1.4 Clean up dependencies
-- [ ] Remove `colorama` from `pyproject.toml` and `requirements.txt`
-- [ ] Remove `termcolor` from `pyproject.toml` and `requirements.txt`
-- [ ] Remove `tqdm` from `pyproject.toml` and `requirements.txt`
-- [ ] Remove `Pygments` from `pyproject.toml` and `requirements.txt`
-- [ ] Remove `markdown-it-py` and `mdurl` from `pyproject.toml` and `requirements.txt`
-- [ ] Remove `windows-curses` from `pyproject.toml` and `requirements.txt`
-- [ ] Add `rich` as a dependency
-- [ ] Add `click` or `typer` as a dependency
-- [ ] Run `pip install .` in a clean venv and verify no import errors
+- [x] Remove `colorama` from `pyproject.toml` and `requirements.txt`
+- [x] Remove `termcolor` from `pyproject.toml` and `requirements.txt`
+- [x] Remove `tqdm` from `pyproject.toml` and `requirements.txt`
+- [x] Remove `Pygments` from `pyproject.toml` and `requirements.txt`
+- [x] Remove `markdown-it-py` and `mdurl` from `pyproject.toml` and `requirements.txt`
+- [x] Remove `windows-curses` from `pyproject.toml` and `requirements.txt`
+- [x] Add `rich` as a dependency
+- [x] Add `click` or `typer` as a dependency
+- [x] Ensure `requirements.txt` and `pyproject.toml` are updated with correct dependencies and versions.
+- [x] Run `pip install .` in a clean venv and verify no import errors
 
 ---
 
@@ -196,5 +197,6 @@
 
 | Date | Change |
 |---|---|
+| 2026-03-20 | Completed Phase 1 (Rich migration, asyncio refactor, Click CLI); added commit animation and looping tasks to Phase 3. |
 | 2026-03-15 | Initial backlog created from full project analysis |
 | 2026-03-15 | Reordered: migration (Phase 1) before curses-specific fixes; dropped obsolete curses bug tasks |
