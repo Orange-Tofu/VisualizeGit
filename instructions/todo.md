@@ -88,35 +88,45 @@
 
 ## Phase 3: New Command Animations
 
-### 3.1 `vgit push` (P0)
+### 3.1 Correct Git Commit animation (P0)
+- [ ] Identify visual discontinuities in the current commit animation.
+- [ ] Ensure the animated commit node properly attaches to the local branch line.
+- [ ] Verify both `commit -m` and `commit --amend` visual logic.
+
+### 3.2 Add continuous animation loop (P0)
+- [ ] Change animation to loop continuously.
+- [ ] Wait for user input (e.g., key press like 'q' or 'Enter') to exit the UI.
+- [ ] Update documentation to reflect the new exit condition.
+
+### 3.3 `vgit push` (P0)
 - [ ] Design animation: commits flying from local branch to remote (mirror of fetch)
 - [ ] Create `animations/push.py` with `render()` and `start()`
 - [ ] Create `commands/push.py` — build state, start animation, run `git push`, stop
 - [ ] Register `"push"` in command registry
 - [ ] Handle edge cases: no remote, force push, rejected push
 
-### 3.2 `vgit pull` (P0)
+### 3.4 `vgit pull` (P0)
 - [ ] Design animation: fetch phase (commits arriving) + merge phase (branches converging)
 - [ ] Create `animations/pull.py`
 - [ ] Create `commands/pull.py` — may need to show two-stage animation
 - [ ] Register `"pull"` in command registry
 - [ ] Handle fast-forward vs merge commit cases
 
-### 3.3 `vgit add` (P1)
+### 3.5 `vgit add` (P1)
 - [ ] Design animation: files moving from "Changed"/"Untracked" box to "Staged" box
 - [ ] Create `animations/add.py`
 - [ ] Create `commands/add.py`
 - [ ] Register `"add"` in command registry
 - [ ] Support `vgit add .` and `vgit add <file>`
 
-### 3.4 `vgit checkout` / `vgit switch` (P1)
+### 3.6 `vgit checkout` / `vgit switch` (P1)
 - [ ] Design animation: HEAD pointer moving between branches
 - [ ] Create `animations/checkout.py`
 - [ ] Create `commands/checkout.py`
 - [ ] Register both `"checkout"` and `"switch"` in command registry
 - [ ] Handle branch creation (`-b` flag)
 
-### 3.5 `vgit merge` (P2)
+### 3.7 `vgit merge` (P2)
 - [ ] Design animation: two branch lines converging into a merge commit
 - [ ] Create `animations/merge.py`
 - [ ] Create `commands/merge.py`
@@ -124,7 +134,7 @@
 - [ ] Handle fast-forward vs three-way merge
 - [ ] Handle merge conflicts (show conflict state)
 
-### 3.6 `vgit rebase` (P2)
+### 3.8 `vgit rebase` (P2)
 - [ ] Design animation: commits being replayed on top of another branch
 - [ ] Create `animations/rebase.py`
 - [ ] Create `commands/rebase.py`
