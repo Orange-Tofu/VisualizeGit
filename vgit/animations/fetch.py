@@ -101,7 +101,7 @@ def render(state):
     branches_table.add_row(local_col, remote_col)
 
     # ── animation body ──────────────────────────────────────
-    total_steps = 10
+    total_steps = 30
 
     if state._fetch_stage == "fetching":
         fly_area = _build_fly_area(

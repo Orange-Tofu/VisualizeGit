@@ -1,9 +1,9 @@
 # commands/status.py
-import time
+import asyncio
 from vgit.core import git_utils
 from vgit.animations import status as status_anim
 
-def run(top_window, runner):
+async def run(top_window, runner):
     """
     Run the git status animation (top) while streaming the real command (bottom).
     """
@@ -13,7 +13,7 @@ def run(top_window, runner):
     git_state.behind = behind
 
     controller = status_anim.start(top_window, git_state)
-    runner.run_and_stream()
-    time.sleep(5)
+    await runner.run_and_stream()
+    await asyncio.sleep(3)
 
-    controller.stop()
+    await controller.stop()

@@ -1,9 +1,9 @@
 # commands/fetch.py
-import time
+import asyncio
 from vgit.core import git_utils
 from vgit.animations import fetch as fetch_anim
 
-def run(top_window, runner):
+async def run(top_window, runner):
     """
     Run git fetch animation + actual command execution.
     """
@@ -14,7 +14,11 @@ def run(top_window, runner):
 
     controller = fetch_anim.start(top_window, git_state)
 
-    runner.run_and_stream()
-    time.sleep(5)
+    await runner.run_and_stream()
+    wait_start = asyncio.get_event_loop().time()
+    while getattr(git_state, "_fetch_stage", "") != "done" and (asyncio.get_event_loop().time() - wait_start) < 5.0:
+        await asyncio.sleep(0.1)
 
-    controller.stop()
+    await asyncio.sleep(2)
+
+    await controller.stop()

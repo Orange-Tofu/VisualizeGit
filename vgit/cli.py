@@ -1,6 +1,7 @@
 # vgit/cli.py
 
 import argparse
+import asyncio
 from vgit import ui
 from vgit.commands import status, fetch, commit
 
@@ -25,4 +26,5 @@ def main():
     full_command = ["git"] + args.git_command
 
     animation_fn = SUPPORTED_COMMANDS.get(subcommand, ui.unsupported_command_animation)
-    ui.start_ui(animation_fn, full_command)
+    asyncio.run(ui.start_ui(animation_fn, full_command))
+

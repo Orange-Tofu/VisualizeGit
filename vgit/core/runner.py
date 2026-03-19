@@ -1,6 +1,5 @@
 # core/runner.py
-import subprocess
-import time
+import asyncio
 from rich.panel import Panel
 from rich.text import Text
 
@@ -11,32 +10,38 @@ class CommandRunner:
         self.output_lines = []
         self._process = None
 
-    def run_and_stream(self):
+    async def run_and_stream(self):
         """Run the git command and stream live output into the layout pane."""
-        self._process = subprocess.Popen(
-            self.cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-            encoding='utf-8',
-            errors='replace'
+        # Split command into program and args for create_subprocess_exec
+        program = self.cmd[0]
+        args = self.cmd[1:]
+        
+        self._process = await asyncio.create_subprocess_exec(
+            program,
+            *args,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT,
         )
 
-        for line in self._process.stdout:
-            self.output_lines.append(line.rstrip())
-            # Keep only the last N lines to prevent layout overflow, or just show all in a Panel
-            # Let's show the last 50 lines
+        while True:
+            line = await self._process.stdout.readline()
+            if not line:
+                break
+            
+            decoded_line = line.decode('utf-8', errors='replace').rstrip()
+            self.output_lines.append(decoded_line)
+            
+            # Show the last 50 lines
             display_text = "\n".join(self.output_lines[-50:])
-            # Update the layout pane (Live will automatically redraw it)
+            # Update the layout pane
             self.layout_pane.update(Panel(Text(display_text), title="Command Output", border_style="blue"))
 
-        self._process.wait()
+        await self._process.wait()
         return self._process.returncode, self.output_lines
 
     def process_running(self):
         """Check if process is still active."""
-        return self._process and self._process.poll() is None
+        return self._process and self._process.returncode is None
 
     def get_output(self):
         """Get collected output lines."""

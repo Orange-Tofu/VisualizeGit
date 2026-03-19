@@ -1,9 +1,11 @@
+import asyncio
 from git import Repo
 from vgit.core import git_utils as git_utils
 from vgit.animations import commit as commit_anim
-import time
+from rich.panel import Panel
+from rich.text import Text
 
-def run(top_window, runner):
+async def run(top_window, runner):
     """
     Handle git commit animation & execution.
     """
@@ -25,8 +27,7 @@ def run(top_window, runner):
                 if m_index + 1 < len(user_cmd):
                     commit_message = user_cmd[m_index + 1]
         else:
-            runner.window.addstr(1, 2, "Interactive amend not supported")
-            runner.window.refresh()
+            runner.layout_pane.update(Panel(Text("Interactive amend not supported"), title="Error", border_style="red"))
             return
     elif "-m" in user_cmd or "--message" in user_cmd:
             git_state.commit_type = "commit_m"
@@ -39,8 +40,7 @@ def run(top_window, runner):
                 if m_index + 1 < len(user_cmd):
                     commit_message = user_cmd[m_index + 1]
     else:
-        runner.window.addstr(1, 2, "Interactive commit not supported")
-        runner.window.refresh()
+        runner.layout_pane.update(Panel(Text("Interactive commit not supported"), title="Error", border_style="red"))
         return
 
     git_state.commit_message = commit_message or "New"
@@ -52,7 +52,7 @@ def run(top_window, runner):
     git_state.commit_messages = [c.message.splitlines()[0] for c in reversed(last_commits)]
 
     controller = commit_anim.start(top_window, git_state)
-    runner.run_and_stream()
+    await runner.run_and_stream()
 
     # After commit, reload commits (so HEAD moves)
     repo = Repo(".")
@@ -60,4 +60,5 @@ def run(top_window, runner):
     git_state.commit_hashes = [c.hexsha for c in reversed(last_commits)]
     git_state.commit_messages = [c.message.splitlines()[0] for c in reversed(last_commits)]
 
-    controller.stop()
+    await asyncio.sleep(4)
+    await controller.stop()

@@ -29,8 +29,9 @@ def render_commit_m(state):
     commits_text = _render_existing_commits(state)
     
     # animation
-    if frame < 6:
-        fly_spaces = " " * (6 - frame) * 3
+    max_frames = 20
+    if frame < max_frames:
+        fly_spaces = " " * (max_frames - frame) * 2
         commits_text.append(fly_spaces + f" ──▶──▶  {COMMIT_CHAR} ", style="cyan")
     else:
         commits_text.append(f" ──▶──▶  {COMMIT_CHAR} ", style="cyan")
@@ -57,9 +58,9 @@ def render_commit_amend(state):
     frame = state._frame
     commits_text = _render_existing_commits(state)
     
-    if frame <= 4:
+    if frame <= 10:
         note = Text("Files moved to staging area...", style="yellow")
-    elif frame < 9:
+    elif frame < 25:
         note = Text("Creating replacement commit...", style="yellow")
     else:
         note = Text("Replaced old commit with amended commit.", style="yellow")
@@ -74,6 +75,7 @@ def render_commit_amend(state):
         "",
         Align.center(note)
     )
+
 
 def render(state):
     ctype = getattr(state, "commit_type", "commit_m")

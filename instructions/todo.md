@@ -26,12 +26,13 @@
 
 
 ### 1.2 Migrate from threads to `asyncio`
-- [ ] Convert `CommandRunner.run_and_stream()` to use `asyncio.create_subprocess_exec`
-- [ ] Convert animation loop to an async task instead of a daemon thread
-- [ ] Use `asyncio.gather()` to run animation + command concurrently
-- [ ] Remove `AnimationController` thread-join logic — use `asyncio.Task.cancel()` instead
-- [ ] Update all command handlers (`status.py`, `fetch.py`, `commit.py`) to be `async def run()`
-- [ ] Remove `threading` imports from all modules
+- [x] Convert `CommandRunner.run_and_stream()` to use `asyncio.create_subprocess_exec`
+- [x] Convert animation loop to an async task instead of a daemon thread
+- [x] Use `asyncio.gather()` to run animation + command concurrently
+- [x] Remove `AnimationController` thread-join logic — use `asyncio.Task.cancel()` instead
+- [x] Update all command handlers (`status.py`, `fetch.py`, `commit.py`) to be `async def run()`
+- [x] Remove `threading` imports from all modules
+
 
 ### 1.3 Migrate from `argparse` to `click` or `typer`
 - [ ] Choose between `click` (mature, explicit) and `typer` (type-hint driven, built on click)
