@@ -1,5 +1,8 @@
 # Contributing to vgit
 
+## CURRENTLY NOT ACCEPTING ANY CONTRIBUTIONS
+I want to first stabilize and set the foundation of the project, before asking others for their time. Once it's stable, I'll update this section to reflect the new contribution guidelines.
+
 🎉 Thank you for your interest in contributing!  
 
 This project is licensed under the GNU General Public License version 3 (GPLv3).  
