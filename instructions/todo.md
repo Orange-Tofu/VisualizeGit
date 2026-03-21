@@ -62,10 +62,10 @@
 ### 2.1 Add continuous animation loop with user-input exit (promoted from 3.2)
 > `time.sleep` is gone — `asyncio.sleep(pause)` with speed-scaled values replaced it in Phase 1.
 > Implementing this task (loop until keypress) is the correct event-driven successor.
-- [ ] Change animation to loop continuously after the git command finishes
-- [ ] Wait for user input (e.g., key press like `q` or `Enter`) to exit the UI instead of a fixed sleep
-- [ ] Update all command handlers (`status.py`, `fetch.py`, `commit.py`) to await the keypress signal
-- [ ] Update documentation / help text to reflect the new exit condition
+- [x] Change animation to loop continuously after the git command finishes
+- [x] Wait for user input (e.g., key press like `q` or `Enter`) to exit the UI instead of a fixed sleep
+- [x] Update all command handlers (`status.py`, `fetch.py`, `commit.py`) to await the keypress signal
+- [x] Update documentation / help text to reflect the new exit condition
 
 ### 2.2 Replace bare `except Exception: pass`
 - [ ] Catch specific exceptions only (not broad `Exception`)

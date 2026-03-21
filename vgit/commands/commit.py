@@ -61,6 +61,4 @@ async def run(top_window, runner, speed='normal'):
     git_state.commit_hashes = [c.hexsha for c in reversed(last_commits)]
     git_state.commit_messages = [c.message.splitlines()[0] for c in reversed(last_commits)]
 
-    pause = 4.0 if speed == 'normal' else (2.0 if speed == 'fast' else 8.0)
-    await asyncio.sleep(pause)
-    await controller.stop()
+    return controller

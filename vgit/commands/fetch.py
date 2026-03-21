@@ -20,7 +20,4 @@ async def run(top_window, runner, speed='normal'):
     while getattr(git_state, "_fetch_stage", "") != "done" and (asyncio.get_event_loop().time() - wait_start) < 5.0:
         await asyncio.sleep(0.1)
 
-    pause = 2.0 if speed == 'normal' else (1.0 if speed == 'fast' else 4.0)
-    await asyncio.sleep(pause)
-
-    await controller.stop()
+    return controller

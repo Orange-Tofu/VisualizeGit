@@ -30,17 +30,25 @@ def render_commit_m(state):
     
     # animation
     max_frames = 20
+    wait_frames = 25
+    
+    restarting_note = ""
     if frame < max_frames:
         fly_spaces = " " * (max_frames - frame) * 2
         commits_text.append(fly_spaces + f" ──▶──▶  {COMMIT_CHAR} ", style="cyan")
-    else:
+        note = f"Branch: {state.branch} – Adding new commit..."
+    elif frame < max_frames + wait_frames:
         commits_text.append(f" ──▶──▶  {COMMIT_CHAR} ", style="cyan")
         msg = state.commit_message[:8] if hasattr(state, "commit_message") and state.commit_message else "New"
         commits_text.append(f' "{msg}"', style="yellow")
+        note = "New commit added!"
+        restarting_note = "Restarting animation..."
+    else:
+        # restart
+        state._frame = 0
+        return render_commit_m(state)
         
     head_text = Text("\nHEAD ↓\n", style="magenta bold")
-    
-    note = f"Branch: {state.branch} – Adding new commit..."
     
     state._frame += 1
 
@@ -48,7 +56,9 @@ def render_commit_m(state):
         head_text,
         commits_text,
         "",
-        Align.center(Text(note, style="yellow"))
+        Align.center(Text(note, style="yellow")),
+        "",
+        Align.center(Text(restarting_note, style="dim italic"))
     )
 
 def render_commit_amend(state):
@@ -58,12 +68,20 @@ def render_commit_amend(state):
     frame = state._frame
     commits_text = _render_existing_commits(state)
     
+    max_frames = 25
+    wait_frames = 20
+    
+    restarting_note = ""
     if frame <= 10:
         note = Text("Files moved to staging area...", style="yellow")
-    elif frame < 25:
+    elif frame < max_frames:
         note = Text("Creating replacement commit...", style="yellow")
+    elif frame < max_frames + wait_frames:
+        note = Text("Replaced old commit with amended commit!", style="green")
+        restarting_note = "Restarting animation..."
     else:
-        note = Text("Replaced old commit with amended commit.", style="yellow")
+        state._frame = 0
+        return render_commit_amend(state)
         
     staging = Text("\n[STAGING AREA]\n• Existing changes", style="red")
     
@@ -73,7 +91,9 @@ def render_commit_amend(state):
         commits_text,
         staging,
         "",
-        Align.center(note)
+        Align.center(note),
+        "",
+        Align.center(Text(restarting_note, style="dim italic"))
     )
 
 

@@ -16,7 +16,4 @@ async def run(top_window, runner, speed='normal'):
     controller = status_anim.start(top_window, git_state)
     await runner.run_and_stream()
     
-    pause = 3.0 if speed == 'normal' else (1.5 if speed == 'fast' else 6.0)
-    await asyncio.sleep(pause)
-
-    await controller.stop()
+    return controller

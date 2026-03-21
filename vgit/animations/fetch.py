@@ -120,7 +120,8 @@ def render(state):
 
         state._fetch_frame += 1
         if state._fetch_frame >= total_steps:
-            state._fetch_stage = "done"
+            state._fetch_stage = "waiting"
+            state._fetch_wait = 0
 
         # branches (top) → fly area (arrow descends) → box (bottom)
         body = Group(
@@ -129,8 +130,23 @@ def render(state):
             "",
             Align.center(note),
         )
+    elif state._fetch_stage == "waiting":
+        # Visuals of 'done' state but with a delay before restart
+        fetched = int(getattr(state, "behind", 0))
+        ref_box = _build_local_ref_box(content_char="✔", style="green")
+        
+        msg = f"Fetched {fetched} new commit(s)." if fetched > 0 else "No new commits fetched."
+        msg1 = Text(msg, style="bold green", justify="center")
+        msg2 = Text("Restarting animation...", style="dim italic", justify="center")
+
+        body = Group("", ref_box, "", Align.center(msg1), Align.center(msg2))
+        
+        state._fetch_wait += 1
+        if state._fetch_wait >= 25: # ~2.5 seconds at 10fps
+            state._fetch_stage = "fetching"
+            state._fetch_frame = 0
     else:
-        # ── done state ──────────────────────────────────────
+        # Original 'done' state (if somehow state is set to done elsewhere)
         fetched = int(getattr(state, "behind", 0))
         ref_box = _build_local_ref_box(content_char="✔", style="green")
 

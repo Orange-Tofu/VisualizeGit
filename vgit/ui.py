@@ -10,17 +10,41 @@ def setup_layout():
     layout = Layout()
     layout.split_column(
         Layout(name="top", ratio=2),
-        Layout(name="bottom", ratio=3)
+        Layout(name="bottom", ratio=3),
+        Layout(name="footer", size=1)
     )
     return layout
 
+async def wait_for_keypress():
+    """Wait for a keypress to exit the UI."""
+    try:
+        import msvcrt
+        while True:
+            if msvcrt.kbhit():
+                msvcrt.getch()
+                break
+            await asyncio.sleep(0.05)
+    except ImportError:
+        # Fallback for non-Windows (though project is focused on Windows)
+        # In a real environment, we'd use something cross-platform or raw stdin
+        await asyncio.sleep(2.0)
+
 async def start_ui(command_fn, full_command, speed='normal'):
+    from rich.align import Align
+    from rich.text import Text
     console = Console()
     layout = setup_layout()
     runner = CommandRunner(full_command, layout["bottom"])
     
     with Live(layout, console=console, refresh_per_second=10, screen=True) as live:
-        await command_fn(layout["top"], runner, speed=speed)
+        controller = await command_fn(layout["top"], runner, speed=speed)
+
+        layout["footer"].update(Align.right(Text(" Animation looping. Press any key to exit...", style="bold cyan")))
+        
+        await wait_for_keypress()
+        
+        if controller:
+            await controller.stop()
         
     print("\n".join(runner.get_output()))
 
@@ -33,8 +57,6 @@ async def unsupported_command_animation(top_layout, runner, speed='normal'):
     controller = default_animation.start(top_layout, dummy_state)
     await runner.run_and_stream()
     
-    pause = 3.0 if speed == 'normal' else (1.5 if speed == 'fast' else 6.0)
-    await asyncio.sleep(pause)
-    await controller.stop()
+    return controller
 
 

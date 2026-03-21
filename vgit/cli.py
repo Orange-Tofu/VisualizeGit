@@ -7,7 +7,7 @@ from vgit.commands import status, fetch, commit
 @click.group(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--speed', type=click.Choice(['fast', 'normal', 'slow']), default='normal', help="Animation speed (normal, fast, slow)")
 def cli(speed):
-    """Educational Git Visualizer"""
+    """Educational Git Visualizer — Animations loop until keypress."""
     pass
 
 def execute_vgit(cmd_name, git_args):

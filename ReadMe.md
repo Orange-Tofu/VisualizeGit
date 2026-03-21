@@ -13,6 +13,7 @@ This project is designed for students, educators, and anyone learning Git.
 * Visualize common Git operations such as status, fetch, and commit with animated terminal graphics.
 * See how branches, commits, and staging areas change over time.
 * Consistent, easy-to-understand animations.
+* Animations loop continuously; press any key to exit and return to the terminal.
 * Runs entirely in the terminal — no extra GUI tools required.
 
 ## Installation
