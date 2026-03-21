@@ -21,11 +21,11 @@ def _render_existing_commits(state):
             t.append(" ──▶──▶ ", style="green")
     return t
 
-def render_commit_m(state):
-    if not hasattr(state, "_frame"):
-        state._frame = 0
+def render_commit_m(state, anim_data):
+    if "frame" not in anim_data:
+        anim_data["frame"] = 0
 
-    frame = state._frame
+    frame = anim_data["frame"]
     commits_text = _render_existing_commits(state)
     
     # animation
@@ -45,12 +45,12 @@ def render_commit_m(state):
         restarting_note = "Restarting animation..."
     else:
         # restart
-        state._frame = 0
-        return render_commit_m(state)
+        anim_data["frame"] = 0
+        return render_commit_m(state, anim_data)
         
     head_text = Text("\nHEAD ↓\n", style="magenta bold")
     
-    state._frame += 1
+    anim_data["frame"] += 1
 
     return Group(
         head_text,
@@ -61,11 +61,11 @@ def render_commit_m(state):
         Align.center(Text(restarting_note, style="dim italic"))
     )
 
-def render_commit_amend(state):
-    if not hasattr(state, "_frame"):
-        state._frame = 0
+def render_commit_amend(state, anim_data):
+    if "frame" not in anim_data:
+        anim_data["frame"] = 0
 
-    frame = state._frame
+    frame = anim_data["frame"]
     commits_text = _render_existing_commits(state)
     
     max_frames = 25
@@ -80,12 +80,12 @@ def render_commit_amend(state):
         note = Text("Replaced old commit with amended commit!", style="green")
         restarting_note = "Restarting animation..."
     else:
-        state._frame = 0
-        return render_commit_amend(state)
+        anim_data["frame"] = 0
+        return render_commit_amend(state, anim_data)
         
     staging = Text("\n[STAGING AREA]\n• Existing changes", style="red")
     
-    state._frame += 1
+    anim_data["frame"] += 1
     
     return Group(
         commits_text,
@@ -97,12 +97,12 @@ def render_commit_amend(state):
     )
 
 
-def render(state):
+def render(state, anim_data):
     ctype = getattr(state, "commit_type", "commit_m")
     if ctype == "commit_m":
-        content = render_commit_m(state)
+        content = render_commit_m(state, anim_data)
     elif ctype in ("amend_no_edit", "amend_with_m"):
-        content = render_commit_amend(state)
+        content = render_commit_amend(state, anim_data)
     else:
         content = Text("Unsupported commit animation")
         

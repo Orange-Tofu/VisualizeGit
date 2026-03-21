@@ -67,16 +67,16 @@
 - [x] Update all command handlers (`status.py`, `fetch.py`, `commit.py`) to await the keypress signal
 - [x] Update documentation / help text to reflect the new exit condition
 
-### 2.2 Replace bare `except Exception: pass`
-- [ ] Catch specific exceptions only (not broad `Exception`)
-- [ ] Log unexpected errors to a debug log file (e.g., `~/.vgit/debug.log`)
-- [ ] Keep existing fallback behavior (don't crash) but make failures diagnosable
+### 2.2 Replace bare `except Exception: pass` [x]
+- [x] Catch specific exceptions only (not broad `Exception`)
+- [x] Log unexpected errors to a debug log file (e.g., `~/.vgit/debug.log`)
+- [x] Keep existing fallback behavior (don't crash) but make failures diagnosable
 
-### 2.3 Convert `GitState` to a dataclass
-- [ ] Add `from dataclasses import dataclass, field` to `git_model.py`
-- [ ] Define all fields explicitly (including `commit_type`, `commit_message`, etc.)
-- [ ] Move animation-specific state (`_frame`, `_fetch_stage`) out of `GitState` into animation modules
-- [ ] Update all consumers to use the new dataclass
+### 2.3 Convert `GitState` to a dataclass [x]
+- [x] Add `from dataclasses import dataclass, field` to `git_model.py`
+- [x] Define all fields explicitly (including `commit_type`, `commit_message`, etc.)
+- [x] Move animation-specific state (`_frame`, `_fetch_stage`) out of `GitState` into animation modules
+- [x] Update all consumers to use the new dataclass
 
 ### 2.4 Refactor duplicated code
 - [ ] Extract shared `draw_box()` into a `animations/widgets.py` module
@@ -92,10 +92,10 @@
 
 ## Phase 3: New Command Animations
 
-### 3.1 Correct Git Commit animation (P0)
-- [ ] Identify visual discontinuities in the current commit animation.
-- [ ] Ensure the animated commit node properly attaches to the local branch line.
-- [ ] Verify both `commit -m` and `commit --amend` visual logic.
+### 3.1 Correct and Verify all Existing Git commands (P0)
+- [ ] Git status
+- [ ] Git fetch
+- [ ] Git commit
 
 ### 3.2 `vgit push` (P0)
 - [ ] Design animation: commits flying from local branch to remote (mirror of fetch)

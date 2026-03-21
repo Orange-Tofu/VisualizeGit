@@ -11,7 +11,7 @@ ROBOT_ASCII = """
    |___|   
 """.strip("\n")
 
-def render(_state=None):
+def render(_state=None, _anim_data=None):
     text = Group(
         Text(ROBOT_ASCII, justify="center", style="cyan"),
         "",

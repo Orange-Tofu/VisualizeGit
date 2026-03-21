@@ -7,7 +7,7 @@ from rich.console import Group
 
 from vgit.animations.base import start_animation
 
-def render(state):
+def render(state, anim_data=None):
     table = Table(show_header=False, show_edge=False, padding=(1, 2))
     table.add_column("untracked", justify="center")
     table.add_column("changed", justify="center")

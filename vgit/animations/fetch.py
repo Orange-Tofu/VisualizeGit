@@ -58,12 +58,12 @@ def _build_fly_area(frame, total_steps, start_x=85, end_x=24, vertical_rows=5):
     return Group(*lines)
 
 
-def render(state):
+def render(state, anim_data):
     """Produce one frame of the fetch animation as a rich renderable."""
-    if not hasattr(state, "_fetch_stage"):
-        state._fetch_stage = "fetching"
-    if not hasattr(state, "_fetch_frame"):
-        state._fetch_frame = 0
+    if "stage" not in anim_data:
+        anim_data["stage"] = "fetching"
+    if "frame" not in anim_data:
+        anim_data["frame"] = 0
 
     tracking_name = getattr(state, "tracking_branch", None)
 
@@ -103,9 +103,9 @@ def render(state):
     # ── animation body ──────────────────────────────────────
     total_steps = 30
 
-    if state._fetch_stage == "fetching":
+    if anim_data["stage"] == "fetching":
         fly_area = _build_fly_area(
-            state._fetch_frame, 
+            anim_data["frame"], 
             total_steps=total_steps,
             start_x=85, 
             end_x=24, 
@@ -118,10 +118,10 @@ def render(state):
             justify="center",
         )
 
-        state._fetch_frame += 1
-        if state._fetch_frame >= total_steps:
-            state._fetch_stage = "waiting"
-            state._fetch_wait = 0
+        anim_data["frame"] += 1
+        if anim_data["frame"] >= total_steps:
+            anim_data["stage"] = "waiting"
+            anim_data["wait"] = 0
 
         # branches (top) → fly area (arrow descends) → box (bottom)
         body = Group(
@@ -130,7 +130,7 @@ def render(state):
             "",
             Align.center(note),
         )
-    elif state._fetch_stage == "waiting":
+    elif anim_data["stage"] == "waiting":
         # Visuals of 'done' state but with a delay before restart
         fetched = int(getattr(state, "behind", 0))
         ref_box = _build_local_ref_box(content_char="✔", style="green")
@@ -141,40 +141,13 @@ def render(state):
 
         body = Group("", ref_box, "", Align.center(msg1), Align.center(msg2))
         
-        state._fetch_wait += 1
-        if state._fetch_wait >= 25: # ~2.5 seconds at 10fps
-            state._fetch_stage = "fetching"
-            state._fetch_frame = 0
+        anim_data["wait"] += 1
+        if anim_data["wait"] >= 25: # ~2.5 seconds at 10fps
+            anim_data["stage"] = "fetching"
+            anim_data["frame"] = 0
     else:
-        # Original 'done' state (if somehow state is set to done elsewhere)
-        fetched = int(getattr(state, "behind", 0))
-        ref_box = _build_local_ref_box(content_char="✔", style="green")
-
-        if fetched > 0:
-            msg1 = Text(
-                f"Fetched {fetched} new commit(s) for this branch.",
-                style="bold green",
-                justify="center",
-            )
-        else:
-            msg1 = Text(
-                "No new commits fetched for this branch.",
-                style="magenta",
-                justify="center",
-            )
-        msg2 = Text(
-            "Commits fetched to remote-tracking refs, not merged into local branches.",
-            style="dim",
-            justify="center",
-        )
-
-        body = Group(
-            "",
-            ref_box,
-            "",
-            Align.center(msg1),
-            Align.center(msg2),
-        )
+        # Fallback
+        body = Group("")
 
     # ── assemble ────────────────────────────────────────────
     frame_group = Group(
@@ -191,4 +164,3 @@ def render(state):
 def start(layout_pane, git_state):
     """Start the fetch animation loop."""
     return start_animation(layout_pane, render, git_state)
-

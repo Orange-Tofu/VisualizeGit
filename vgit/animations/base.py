@@ -21,10 +21,10 @@ def start_animation(layout_pane, render_fn, git_state):
     async def run():
         SPEED_MAP = {'fast': 0.05, 'normal': 0.1, 'slow': 0.3}
         delay = SPEED_MAP.get(getattr(git_state, 'speed', 'normal'), 0.1)
+        anim_data = {} # Separate animation-specific state from GitState
         try:
             while True:
-                # render_fn now returns a rich renderable (e.g. Panel, Group, Table)
-                renderable = render_fn(git_state)
+                renderable = render_fn(git_state, anim_data)
                 if renderable:
                     layout_pane.update(renderable)
                 await asyncio.sleep(delay)
