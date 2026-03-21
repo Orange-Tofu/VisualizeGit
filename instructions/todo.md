@@ -59,10 +59,13 @@
 
 ## Phase 2: Quick Wins (framework-agnostic fixes, do alongside or after Phase 1)
 
-### 2.1 Replace hardcoded `time.sleep(5)` with event-driven lifecycle
-- [ ] Animation should keep looping while the command subprocess is running
-- [ ] On command completion, play final frame(s) and stop — no arbitrary sleep
-- [ ] Add a short configurable post-completion pause (1–2s), not a fixed 5s
+### 2.1 Add continuous animation loop with user-input exit (promoted from 3.2)
+> `time.sleep` is gone — `asyncio.sleep(pause)` with speed-scaled values replaced it in Phase 1.
+> Implementing this task (loop until keypress) is the correct event-driven successor.
+- [ ] Change animation to loop continuously after the git command finishes
+- [ ] Wait for user input (e.g., key press like `q` or `Enter`) to exit the UI instead of a fixed sleep
+- [ ] Update all command handlers (`status.py`, `fetch.py`, `commit.py`) to await the keypress signal
+- [ ] Update documentation / help text to reflect the new exit condition
 
 ### 2.2 Replace bare `except Exception: pass`
 - [ ] Catch specific exceptions only (not broad `Exception`)
@@ -94,40 +97,35 @@
 - [ ] Ensure the animated commit node properly attaches to the local branch line.
 - [ ] Verify both `commit -m` and `commit --amend` visual logic.
 
-### 3.2 Add continuous animation loop (P0)
-- [ ] Change animation to loop continuously.
-- [ ] Wait for user input (e.g., key press like 'q' or 'Enter') to exit the UI.
-- [ ] Update documentation to reflect the new exit condition.
-
-### 3.3 `vgit push` (P0)
+### 3.2 `vgit push` (P0)
 - [ ] Design animation: commits flying from local branch to remote (mirror of fetch)
 - [ ] Create `animations/push.py` with `render()` and `start()`
 - [ ] Create `commands/push.py` — build state, start animation, run `git push`, stop
 - [ ] Register `"push"` in command registry
 - [ ] Handle edge cases: no remote, force push, rejected push
 
-### 3.4 `vgit pull` (P0)
+### 3.3 `vgit pull` (P0)
 - [ ] Design animation: fetch phase (commits arriving) + merge phase (branches converging)
 - [ ] Create `animations/pull.py`
 - [ ] Create `commands/pull.py` — may need to show two-stage animation
 - [ ] Register `"pull"` in command registry
 - [ ] Handle fast-forward vs merge commit cases
 
-### 3.5 `vgit add` (P1)
+### 3.4 `vgit add` (P1)
 - [ ] Design animation: files moving from "Changed"/"Untracked" box to "Staged" box
 - [ ] Create `animations/add.py`
 - [ ] Create `commands/add.py`
 - [ ] Register `"add"` in command registry
 - [ ] Support `vgit add .` and `vgit add <file>`
 
-### 3.6 `vgit checkout` / `vgit switch` (P1)
+### 3.5 `vgit checkout` / `vgit switch` (P1)
 - [ ] Design animation: HEAD pointer moving between branches
 - [ ] Create `animations/checkout.py`
 - [ ] Create `commands/checkout.py`
 - [ ] Register both `"checkout"` and `"switch"` in command registry
 - [ ] Handle branch creation (`-b` flag)
 
-### 3.7 `vgit merge` (P2)
+### 3.6 `vgit merge` (P2)
 - [ ] Design animation: two branch lines converging into a merge commit
 - [ ] Create `animations/merge.py`
 - [ ] Create `commands/merge.py`
@@ -135,7 +133,7 @@
 - [ ] Handle fast-forward vs three-way merge
 - [ ] Handle merge conflicts (show conflict state)
 
-### 3.8 `vgit rebase` (P2)
+### 3.7 `vgit rebase` (P2)
 - [ ] Design animation: commits being replayed on top of another branch
 - [ ] Create `animations/rebase.py`
 - [ ] Create `commands/rebase.py`
@@ -197,6 +195,7 @@
 
 | Date | Change |
 |---|---|
+| 2026-03-21 | Phase 2 audit: 2.1 (time.sleep) superseded — asyncio migration eliminated it; replaced with continuous loop task promoted from 3.2. Phase 3 tasks renumbered (3.2→removed, 3.3→3.2, etc.). |
 | 2026-03-20 | Completed Phase 1 (Rich migration, asyncio refactor, Click CLI); added commit animation and looping tasks to Phase 3. |
 | 2026-03-15 | Initial backlog created from full project analysis |
 | 2026-03-15 | Reordered: migration (Phase 1) before curses-specific fixes; dropped obsolete curses bug tasks |
