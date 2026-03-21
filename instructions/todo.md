@@ -78,15 +78,15 @@
 - [x] Move animation-specific state (`_frame`, `_fetch_stage`) out of `GitState` into animation modules
 - [x] Update all consumers to use the new dataclass
 
-### 2.4 Refactor duplicated code
-- [ ] Extract shared `draw_box()` into a `animations/widgets.py` module
-- [ ] Extract `-m` / `--message` parsing in `commands/commit.py` into a helper function
-- [ ] Consolidate `Repo(".")` instantiation — pass a single `Repo` instance through the call chain
+### 2.4 Refactor duplicated code [x]
+- [x] Extract shared `draw_box()` into a `animations/widgets.py` module
+- [x] Extract `-m` / `--message` parsing in `commands/commit.py` into a helper function
+- [x] Consolidate `Repo(".")` instantiation — pass a single `Repo` instance through the call chain
 
-### 2.5 Delete or fix `examples/app.py`
-- [ ] Decide: archive for reference or delete entirely
-- [ ] If keeping, fix imports to use `vgit.` package prefix
-- [ ] If deleting, remove the `examples/` directory
+### 2.5 Delete or fix `examples/app.py` [x]
+- [x] Decide: archive for reference or delete entirely (deleted)
+- [x] If keeping, fix imports to use `vgit.` package prefix
+- [x] If deleting, remove the `examples/` directory
 
 ---
 

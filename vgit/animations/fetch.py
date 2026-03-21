@@ -6,6 +6,7 @@ from rich.text import Text
 from rich.align import Align
 from rich.console import Group
 from vgit.animations.base import start_animation
+from vgit.animations.widgets import draw_box
 
 COMMIT_CHAR = "●"
 FLYING_COMMIT_CHAR = "🢀"
@@ -21,16 +22,6 @@ def _build_commit_chain(n_commits, style):
             chain.append(CONNECT, style=style)
     return chain
 
-
-def _build_local_ref_box(content_char="•", style="yellow", left_pad=18):
-    """Return a multi-line Text representing the local-ref storage box, offset to align under local branch."""
-    pad = " " * left_pad
-    box = Text()
-    box.append(f"{pad}┌────────────┐\n", style=style)
-    box.append(f"{pad}│ Local Ref  │\n", style=style)
-    box.append(f"{pad}│     {content_char}      │\n", style=style)
-    box.append(f"{pad}└────────────┘", style=style)
-    return box
 
 
 def _build_fly_area(frame, total_steps, start_x=85, end_x=24, vertical_rows=5):
@@ -111,7 +102,7 @@ def render(state, anim_data):
             end_x=24, 
             vertical_rows=5
         )
-        ref_box = _build_local_ref_box()
+        ref_box = draw_box()
         note = Text(
             "Fetching commits… remote data moving to Local Ref",
             style="yellow",
@@ -133,7 +124,7 @@ def render(state, anim_data):
     elif anim_data["stage"] == "waiting":
         # Visuals of 'done' state but with a delay before restart
         fetched = int(getattr(state, "behind", 0))
-        ref_box = _build_local_ref_box(content_char="✔", style="green")
+        ref_box = draw_box(content_char="✔", style="green")
         
         msg = f"Fetched {fetched} new commit(s)." if fetched > 0 else "No new commits fetched."
         msg1 = Text(msg, style="bold green", justify="center")
