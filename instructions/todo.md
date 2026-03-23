@@ -94,8 +94,10 @@
 
 ### 3.1 Correct and Verify all Existing Git commands (P0)
 - [x] Git status
-- [ ] Git fetch
-- [ ] Git commit
+- [x] Git fetch
+- [x] Git commit
+- [x] Unsupported versions of supported commamnds
+- [x] Unsupported commands
 
 ### 3.2 `vgit push` (P0)
 - [ ] Design animation: commits flying from local branch to remote (mirror of fetch)
@@ -195,6 +197,7 @@
 
 | Date | Change |
 |---|---|
+| 2026-03-23 | Successfully implemented fallback for all unknown Git commands: using a custom `CatchAllGroup`, `vgit <cmd>` now consistently launches the TUI with the 'unsupported' animation. |
 | 2026-03-23 | Added commit success detection: use `initial_commit_count` to ensure new commit hash only displays if command succeeds; otherwise show placeholder `(........)` and failure note. |
 | 2026-03-23 | Fixed commit animation alignment: introduced line-synchronization to prevent horizontal drift when messages are longer than hashes; preserved 3-segment arrows and precise vertical alignment. |
 | 2026-03-23 | Fixed Rich layout placeholder glitch: initialized panes with empty Panels to preserve box borders while hiding debug placeholders (e.g. `Layout(name='bottom')`) when commands have no output. |

@@ -10,6 +10,7 @@ async def run(top_window, runner, speed='normal'):
     """
     Handle git commit animation & execution.
     """
+    from vgit import ui
     user_cmd = runner.cmd
     repo = Repo(".")
     
@@ -22,13 +23,11 @@ async def run(top_window, runner, speed='normal'):
         elif "-m" in user_cmd or "--message" in user_cmd:
             git_state.commit_type = "amend_with_m"
         else:
-            runner.layout_pane.update(Panel(Text("Interactive amend not supported"), title="Error", border_style="red"))
-            return None
+            return await ui.unsupported_version_animation(top_window, runner, speed=speed)
     elif "-m" in user_cmd or "--message" in user_cmd:
         git_state.commit_type = "commit_m"
     else:
-        runner.layout_pane.update(Panel(Text("Interactive commit not supported"), title="Error", border_style="red"))
-        return None
+        return await ui.unsupported_version_animation(top_window, runner, speed=speed)
 
     git_state.commit_message = git_utils.get_commit_message_from_args(user_cmd) or "New"
 

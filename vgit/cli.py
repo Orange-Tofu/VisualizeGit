@@ -1,18 +1,44 @@
-# vgit/cli.py
 import click
 import asyncio
 from vgit import ui
 from vgit.commands import status, fetch, commit
 
-@click.group(context_settings=dict(help_option_names=['-h', '--help']))
+class CatchAllGroup(click.Group):
+    """Custom Click Group that intercepts unknown commands and runs them as Git fallbacks."""
+    def get_command(self, ctx, cmd_name):
+        # Check if the command is explicitly registered (status, fetch, commit)
+        cmd = super().get_command(ctx, cmd_name)
+        if cmd is not None:
+            return cmd
+        
+        # If not, create a dynamic command that passes everything to execute_vgit
+        @click.command(name=cmd_name, context_settings=dict(ignore_unknown_options=True, help_option_names=[]))
+        @click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
+        def fallback_cmd(git_args):
+            execute_vgit(cmd_name, git_args)
+        return fallback_cmd
+
+@click.group(
+    cls=CatchAllGroup,
+    context_settings=dict(help_option_names=['-h', '--help']),
+    invoke_without_command=True
+)
 @click.option('--speed', type=click.Choice(['fast', 'normal', 'slow']), default='normal', help="Animation speed (normal, fast, slow)")
-def cli(speed):
+@click.pass_context
+def cli(ctx, speed):
     """Educational Git Visualizer — Animations loop until keypress."""
-    pass
+    if ctx.invoked_subcommand is None:
+        # User entered 'vgit' with no args - show help
+        click.echo(cli.get_help(ctx))
 
 def execute_vgit(cmd_name, git_args):
     ctx = click.get_current_context()
-    speed = ctx.parent.params.get('speed', 'normal')
+    # Speed might be in current context (fallback case) or parent context (subcommand case)
+    speed = ctx.params.get('speed')
+    if speed is None and ctx.parent:
+        speed = ctx.parent.params.get('speed')
+    if speed is None:
+        speed = 'normal'
     
     # If the user passed --help, pass it through to git directly
     if '--help' in git_args or '-h' in git_args:

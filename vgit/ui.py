@@ -7,6 +7,8 @@ from rich.layout import Layout
 from rich.live import Live
 
 from rich.panel import Panel
+from rich.align import Align
+from rich.text import Text
 
 def setup_layout():
     layout = Layout()
@@ -35,8 +37,6 @@ async def wait_for_keypress():
         await asyncio.sleep(2.0)
 
 async def start_ui(command_fn, full_command, speed='normal'):
-    from rich.align import Align
-    from rich.text import Text
     console = Console()
     layout = setup_layout()
     runner = CommandRunner(full_command, layout["bottom"])
@@ -53,6 +53,8 @@ async def start_ui(command_fn, full_command, speed='normal'):
         
     print("\n".join(runner.get_output()))
 
+import vgit.animations.unsupported_version as unsupported_version_anim
+
 async def unsupported_command_animation(top_layout, runner, speed='normal'):
     # default animation needs a state with speed if we want it respects speed
     from vgit.core.git_model import GitState
@@ -62,6 +64,22 @@ async def unsupported_command_animation(top_layout, runner, speed='normal'):
     controller = default_animation.start(top_layout, dummy_state)
     await runner.run_and_stream()
     
+    return controller
+
+async def unsupported_version_animation(top_layout, runner, speed='normal'):
+    from vgit.core.git_model import GitState
+    dummy_state = GitState(0, 0, 0, "HEAD")
+    dummy_state.speed = speed
+    
+    # We explicitly do NOT run the command because it's usually interactive 
+    # and would hang the TUI (e.g. asking for message).
+    runner.layout_pane.update(Panel(
+        Align.center(Text("\nInteractive command skipped.\nPlease run this version directly in your terminal.", style="yellow")),
+        title="Git Output (Skipped)",
+        border_style="red"
+    ))
+    
+    controller = unsupported_version_anim.start(top_layout, dummy_state)
     return controller
 
 
