@@ -19,3 +19,5 @@ class GitState:
     speed: str = 'normal'
     commit_type: str = 'commit_m'
     initial_commit_count: int = -1
+    base_hashes: List[str] = field(default_factory=list)
+    base_messages: List[str] = field(default_factory=list)

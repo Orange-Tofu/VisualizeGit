@@ -43,7 +43,9 @@ async def run(top_window, runner, speed='normal'):
             git_state.commit_messages = []
 
     update_states(repo)
-    # Store initial count so animation knows history base
+    # Record the base history for consistent animation even after refresh
+    git_state.base_hashes = list(git_state.commit_hashes)
+    git_state.base_messages = list(git_state.commit_messages)
     git_state.initial_commit_count = len(git_state.commit_hashes)
 
     controller = commit_anim.start(top_window, git_state)

@@ -9,11 +9,14 @@ COMMIT_CHAR = "◉"
 
 def _render_existing_commits(state):
     """Return two Text objects (lines) showing shared history."""
-    # Use -1 sentinel to detect the case before history base is recorded
-    init_val = getattr(state, "initial_commit_count", -1)
-    base_count = init_val if init_val != -1 else len(state.commit_hashes)
-    h_list = state.commit_hashes[:base_count]
-    m_list = state.commit_messages[:base_count]
+    # Use the recorded base history so the history chain doesn't shift
+    h_list = getattr(state, "base_hashes", [])
+    m_list = getattr(state, "base_messages", [])
+    
+    # If not recorded (unlikely), fallback once
+    if not h_list:
+        h_list = state.commit_hashes
+        m_list = state.commit_messages
     
     commits = h_list[-3:]
     messages = m_list[-3:]
@@ -83,14 +86,15 @@ def render_commit_m(state, anim_data):
             
         l1.append(bubble_part, style="cyan")
         
-        # Check if we actually have a new commit compared to our base
-        init_val = getattr(state, "initial_commit_count", -1)
-        base_count = init_val if init_val != -1 else len(state.commit_hashes)
-        has_new = len(state.commit_hashes) > base_count
+        # Better newness detection: Has the latest hash changed relative to base?
+        base_h = state.base_hashes[-1] if state.base_hashes else None
+        curr_h = state.commit_hashes[-1] if state.commit_hashes else None
+        
+        # If we had no history and now have one, or if the last hash changed
+        has_new = curr_h and (curr_h != base_h)
         
         if has_new:
-            new_h = state.commit_hashes[-1]
-            hash_txt = f"({new_h[:8]})"
+            hash_txt = f"({curr_h[:8]})"
             note = "New commit added!"
         else:
             hash_txt = "(........)"
