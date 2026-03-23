@@ -17,7 +17,7 @@ This project is designed for students, educators, and anyone learning Git.
 * Runs entirely in the terminal — no extra GUI tools required.
 
 ## Installation
-Install vgit globally via pip:
+Install vgit globally via pip: (Not published yet, dont follow this)
 
 ```bash
 pip install vgit
