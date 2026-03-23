@@ -18,4 +18,4 @@ class GitState:
     tracking_branch: Optional[str] = None
     speed: str = 'normal'
     commit_type: str = 'commit_m'
-    initial_commit_count: int = 0
+    initial_commit_count: int = -1

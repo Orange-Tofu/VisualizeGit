@@ -9,10 +9,11 @@ COMMIT_CHAR = "◉"
 
 def _render_existing_commits(state):
     """Return two Text objects (lines) showing shared history."""
-    # History base should stay locked to what it was when animation started
-    initial_count = getattr(state, "initial_commit_count", 0) or len(state.commit_hashes)
-    h_list = state.commit_hashes[:initial_count]
-    m_list = state.commit_messages[:initial_count]
+    # Use -1 sentinel to detect the case before history base is recorded
+    init_val = getattr(state, "initial_commit_count", -1)
+    base_count = init_val if init_val != -1 else len(state.commit_hashes)
+    h_list = state.commit_hashes[:base_count]
+    m_list = state.commit_messages[:base_count]
     
     commits = h_list[-3:]
     messages = m_list[-3:]
@@ -82,9 +83,10 @@ def render_commit_m(state, anim_data):
             
         l1.append(bubble_part, style="cyan")
         
-        # Only show the hash if we actually have a new commit
-        init_count = getattr(state, "initial_commit_count", 0)
-        has_new = len(state.commit_hashes) > init_count
+        # Check if we actually have a new commit compared to our base
+        init_val = getattr(state, "initial_commit_count", -1)
+        base_count = init_val if init_val != -1 else len(state.commit_hashes)
+        has_new = len(state.commit_hashes) > base_count
         
         if has_new:
             new_h = state.commit_hashes[-1]
