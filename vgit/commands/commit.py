@@ -43,11 +43,18 @@ async def run(top_window, runner, speed='normal'):
             git_state.commit_messages = []
 
     update_states(repo)
+    # Store initial count so animation knows history base
+    git_state.initial_commit_count = len(git_state.commit_hashes)
 
     controller = commit_anim.start(top_window, git_state)
-    await runner.run_and_stream()
+    exit_code, _lines = await runner.run_and_stream()
 
     # Refresh after command execution
     update_states(repo)
+    
+    # If it failed, let animation know or stop it
+    if exit_code != 0:
+        # We can change the commit type to something that render() handles specially
+        git_state.commit_type = 'failed'
 
     return controller

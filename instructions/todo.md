@@ -93,7 +93,7 @@
 ## Phase 3: New Command Animations
 
 ### 3.1 Correct and Verify all Existing Git commands (P0)
-- [ ] Git status
+- [x] Git status
 - [ ] Git fetch
 - [ ] Git commit
 
@@ -195,6 +195,9 @@
 
 | Date | Change |
 |---|---|
+| 2026-03-23 | Added commit success detection: use `initial_commit_count` to ensure new commit hash only displays if command succeeds; otherwise show placeholder `(........)` and failure note. |
+| 2026-03-23 | Fixed commit animation alignment: introduced line-synchronization to prevent horizontal drift when messages are longer than hashes; preserved 3-segment arrows and precise vertical alignment. |
+| 2026-03-23 | Fixed Rich layout placeholder glitch: initialized panes with empty Panels to preserve box borders while hiding debug placeholders (e.g. `Layout(name='bottom')`) when commands have no output. |
 | 2026-03-21 | Phase 2 audit: 2.1 (time.sleep) superseded — asyncio migration eliminated it; replaced with continuous loop task promoted from 3.2. Phase 3 tasks renumbered (3.2→removed, 3.3→3.2, etc.). |
 | 2026-03-20 | Completed Phase 1 (Rich migration, asyncio refactor, Click CLI); added commit animation and looping tasks to Phase 3. |
 | 2026-03-15 | Initial backlog created from full project analysis |

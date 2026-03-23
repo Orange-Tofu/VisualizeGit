@@ -6,6 +6,8 @@ from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
 
+from rich.panel import Panel
+
 def setup_layout():
     layout = Layout()
     layout.split_column(
@@ -13,6 +15,9 @@ def setup_layout():
         Layout(name="bottom", ratio=3),
         Layout(name="footer", size=1)
     )
+    layout["top"].update(Panel("", border_style="blue"))
+    layout["bottom"].update(Panel("", title="Command Output", border_style="blue"))
+    layout["footer"].update("")
     return layout
 
 async def wait_for_keypress():
