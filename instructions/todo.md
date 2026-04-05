@@ -123,11 +123,11 @@
 - [x] Visual: Missing Upstream (error banner).
 
 ### 3.4 `vgit add` (P1)
-- [ ] Design animation: files moving from "Changed"/"Untracked" box to "Staged" box
-- [ ] Create `animations/add.py`
-- [ ] Create `commands/add.py`
-- [ ] Register `"add"` in command registry
-- [ ] Support `vgit add .` and `vgit add <file>`
+- [x] Design animation: files moving from "Changed"/"Untracked" box to "Staged" box
+- [x] Create `animations/add.py`
+- [x] Create `commands/add.py`
+- [x] Register `"add"` in command registry
+- [x] Support `vgit add .` and `vgit add <file>`
 
 ### 3.5 `vgit checkout` / `vgit switch` (P1)
 - [ ] Design animation: HEAD pointer moving between branches
@@ -206,6 +206,7 @@
 
 | Date | Change |
 |---|---|
+| 2026-04-05 | Implemented task 3.4 (`vgit add`): created animation showing files moving from 'Unstaged' to 'Staged' areas with a scrolling 'trail' icon effect. |
 | 2026-03-23 | Successfully implemented fallback for all unknown Git commands: using a custom `CatchAllGroup`, `vgit <cmd>` now consistently launches the TUI with the 'unsupported' animation. |
 | 2026-03-23 | Added commit success detection: use `initial_commit_count` to ensure new commit hash only displays if command succeeds; otherwise show placeholder `(........)` and failure note. |
 | 2026-03-23 | Fixed commit animation alignment: introduced line-synchronization to prevent horizontal drift when messages are longer than hashes; preserved 3-segment arrows and precise vertical alignment. |

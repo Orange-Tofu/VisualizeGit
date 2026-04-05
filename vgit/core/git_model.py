@@ -25,3 +25,7 @@ class GitState:
     pull_type: str = 'normal'  # 'normal', 'ff', 'merge', 'rebase', 'conflict', 'up_to_date', 'error'
     is_rebase: bool = False
     runner: Optional[object] = None
+    add_status: str = 'running' # 'running', 'success', 'failed'
+    to_add_count: int = 0
+    initial_staged: int = 0
+    initial_unstaged: int = 0
