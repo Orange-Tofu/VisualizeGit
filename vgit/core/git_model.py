@@ -22,3 +22,6 @@ class GitState:
     base_hashes: List[str] = field(default_factory=list)
     base_messages: List[str] = field(default_factory=list)
     push_type: str = 'normal'
+    pull_type: str = 'normal'  # 'normal', 'ff', 'merge', 'rebase', 'conflict', 'up_to_date', 'error'
+    is_rebase: bool = False
+    runner: Optional[object] = None

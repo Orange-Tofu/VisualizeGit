@@ -111,11 +111,16 @@
 - [x] Visual Caveat: Pushing Multiple Commits — animate a "train" of consecutive commits based on `ahead` count
 
 ### 3.3 `vgit pull` (P0)
-- [ ] Design animation: fetch phase (commits arriving) + merge phase (branches converging)
-- [ ] Create `animations/pull.py`
-- [ ] Create `commands/pull.py` — may need to show two-stage animation
-- [ ] Register `"pull"` in command registry
-- [ ] Handle fast-forward vs merge commit cases
+- [x] Design animation: fetch phase (commits arriving) + integration phase (3-way merge, rebase, or FF)
+- [x] Create `animations/pull.py` — handle stages: `fetching`, `evaluating`, `merging`, `rebasing`, `colliding`
+- [x] Create `commands/pull.py` — detect `--rebase`, ahead/behind, tracking branch
+- [x] Register `"pull"` in `vgit/cli.py`
+- [x] Visual: Standard 3-Way Merge (diverging branches + merge node)
+- [x] Visual: Rebase (detaching and replaying commits)
+- [x] Visual: Fast-Forward (simple append)
+- [x] Visual: Conflict (commit collision animation + halt)
+- [x] Visual: Up-To-Date (instant checkmark)
+- [x] Visual: Missing Upstream (error banner).
 
 ### 3.4 `vgit add` (P1)
 - [ ] Design animation: files moving from "Changed"/"Untracked" box to "Staged" box

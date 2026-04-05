@@ -1,7 +1,7 @@
 import click
 import asyncio
 from vgit import ui
-from vgit.commands import status, fetch, commit, push
+from vgit.commands import status, fetch, commit, push, pull
 
 class CatchAllGroup(click.Group):
     """Custom Click Group that intercepts unknown commands and runs them as Git fallbacks."""
@@ -51,7 +51,8 @@ def execute_vgit(cmd_name, git_args):
         "status": status.run,
         "fetch": fetch.run,
         "commit": commit.run,
-        "push": push.run
+        "push": push.run,
+        "pull": pull.run
     }
     
     full_command = ["git", cmd_name] + list(git_args)
@@ -81,6 +82,11 @@ def commit_cmd(git_args):
 @click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
 def push_cmd(git_args):
     execute_vgit("push", git_args)
+
+@cli.command(name="pull", context_settings=SUBCOMMAND_CONTEXT)
+@click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
+def pull_cmd(git_args):
+    execute_vgit("pull", git_args)
 
 def main():
     """Entry point for the console script"""
