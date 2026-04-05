@@ -100,11 +100,15 @@
 - [x] Unsupported commands
 
 ### 3.2 `vgit push` (P0)
-- [ ] Design animation: commits flying from local branch to remote (mirror of fetch)
-- [ ] Create `animations/push.py` with `render()` and `start()`
-- [ ] Create `commands/push.py` — build state, start animation, run `git push`, stop
-- [ ] Register `"push"` in command registry
-- [ ] Handle edge cases: no remote, force push, rejected push
+- [x] Design Core Animation: commits flying from local branch up to remote (mirror of fetch)
+- [x] Create `animations/push.py` with `render()` and `start()`
+- [x] Create `commands/push.py` — build state, start animation, run `git push`, stop
+- [x] Register `"push"` in command registry
+- [x] Visual Caveat: Push Rejected (Non-Fast-Forward) — animate bounce-back/barrier and show error text
+- [x] Visual Caveat: Force Push (`--force`) — animate aggressive flying commit knocking off remote commits
+- [x] Visual Caveat: No Upstream Branch — animate the spawning/creation of the remote branch dynamically
+- [x] Visual Caveat: Everything Up-To-Date — show a green checkmark instantly instead of flying commits
+- [x] Visual Caveat: Pushing Multiple Commits — animate a "train" of consecutive commits based on `ahead` count
 
 ### 3.3 `vgit pull` (P0)
 - [ ] Design animation: fetch phase (commits arriving) + merge phase (branches converging)
