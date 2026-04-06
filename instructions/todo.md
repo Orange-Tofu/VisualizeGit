@@ -130,11 +130,11 @@
 - [x] Support `vgit add .` and `vgit add <file>`
 
 ### 3.5 `vgit checkout` / `vgit switch` (P1)
-- [ ] Design animation: HEAD pointer moving between branches
-- [ ] Create `animations/checkout.py`
-- [ ] Create `commands/checkout.py`
-- [ ] Register both `"checkout"` and `"switch"` in command registry
-- [ ] Handle branch creation (`-b` flag)
+- [x] Design animation: HEAD pointer moving between branches
+- [x] Create `animations/checkout.py`
+- [x] Create `commands/checkout.py` and `commands/branch.py` (for deletion)
+- [x] Register `"checkout"`, `"switch"`, and `"branch"` in command registry
+- [x] Handle branch creation (`-b` flag) and deletion (`-d` / `-D` flags)
 
 ### 3.6 `vgit merge` (P2)
 - [ ] Design animation: two branch lines converging into a merge commit
@@ -206,6 +206,7 @@
 
 | Date | Change |
 |---|---|
+| 2026-04-06 | Implemented task 3.5 (`vgit checkout` / `switch`): created shared animation for branch switching and added `vgit branch -d` deletion animation support. |
 | 2026-04-05 | Implemented task 3.4 (`vgit add`): created animation showing files moving from 'Unstaged' to 'Staged' areas with a scrolling 'trail' icon effect. |
 | 2026-03-23 | Successfully implemented fallback for all unknown Git commands: using a custom `CatchAllGroup`, `vgit <cmd>` now consistently launches the TUI with the 'unsupported' animation. |
 | 2026-03-23 | Added commit success detection: use `initial_commit_count` to ensure new commit hash only displays if command succeeds; otherwise show placeholder `(........)` and failure note. |

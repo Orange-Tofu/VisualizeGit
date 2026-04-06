@@ -1,7 +1,7 @@
 import click
 import asyncio
 from vgit import ui
-from vgit.commands import status, fetch, commit, push, pull, add
+from vgit.commands import status, fetch, commit, push, pull, add, checkout, switch, branch
 
 class CatchAllGroup(click.Group):
     """Custom Click Group that intercepts unknown commands and runs them as Git fallbacks."""
@@ -53,7 +53,10 @@ def execute_vgit(cmd_name, git_args):
         "commit": commit.run,
         "push": push.run,
         "pull": pull.run,
-        "add": add.run
+        "add": add.run,
+        "checkout": checkout.run,
+        "switch": switch.run,
+        "branch": branch.run
     }
     
     full_command = ["git", cmd_name] + list(git_args)
@@ -93,6 +96,21 @@ def pull_cmd(git_args):
 @click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
 def add_cmd(git_args):
     execute_vgit("add", git_args)
+
+@cli.command(name="checkout", context_settings=SUBCOMMAND_CONTEXT)
+@click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
+def checkout_cmd(git_args):
+    execute_vgit("checkout", git_args)
+
+@cli.command(name="switch", context_settings=SUBCOMMAND_CONTEXT)
+@click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
+def switch_cmd(git_args):
+    execute_vgit("switch", git_args)
+
+@cli.command(name="branch", context_settings=SUBCOMMAND_CONTEXT)
+@click.argument('git_args', nargs=-1, type=click.UNPROCESSED)
+def branch_cmd(git_args):
+    execute_vgit("branch", git_args)
 
 def main():
     """Entry point for the console script"""

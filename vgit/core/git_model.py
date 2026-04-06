@@ -29,3 +29,10 @@ class GitState:
     to_add_count: int = 0
     initial_staged: int = 0
     initial_unstaged: int = 0
+    target_branch: Optional[str] = None
+    is_new_branch: bool = False
+    is_detached_head: bool = False
+    checkout_type: str = 'branch' # 'branch', 'delete_branch', 'unsupported'
+    delete_branch_name: Optional[str] = None
+    upstream_ref: Optional[str] = None
+    checkout_status: str = 'running' # 'running', 'success', 'failed'
