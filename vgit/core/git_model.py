@@ -36,3 +36,7 @@ class GitState:
     delete_branch_name: Optional[str] = None
     upstream_ref: Optional[str] = None
     checkout_status: str = 'running' # 'running', 'success', 'failed'
+    merge_type: str = 'merge'  # 'merge', 'ff', 'collision', 'up_to_date', 'error'
+    is_no_ff: bool = False
+    target_hashes: List[str] = field(default_factory=list)
+    target_messages: List[str] = field(default_factory=list)

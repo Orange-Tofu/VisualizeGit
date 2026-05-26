@@ -1,4 +1,4 @@
-# vgit — Task Backlog
++# vgit — Task Backlog
 
 > Pick tasks top-down. Each top-level item is an independent work unit.
 > Mark `[/]` when in-progress, `[x]` when done.
@@ -137,12 +137,13 @@
 - [x] Handle branch creation (`-b` flag) and deletion (`-d` / `-D` flags)
 
 ### 3.6 `vgit merge` (P2)
-- [ ] Design animation: two branch lines converging into a merge commit
-- [ ] Create `animations/merge.py`
-- [ ] Create `commands/merge.py`
-- [ ] Register `"merge"` in command registry
-- [ ] Handle fast-forward vs three-way merge
-- [ ] Handle merge conflicts (show conflict state)
+- [x] Design animation: two branch lines converging into a merge commit
+- [x] Create `animations/merge.py`
+- [x] Create `commands/merge.py`
+- [x] Register `"merge"` in command registry
+- [x] Handle fast-forward vs three-way merge
+- [x] Handle merge conflicts (show conflict state)
+- [] Need to add git squash, abort and also refine visualization for 3-way merge. 
 
 ### 3.7 `vgit rebase` (P2)
 - [ ] Design animation: commits being replayed on top of another branch
@@ -206,6 +207,7 @@
 
 | Date | Change |
 |---|---|
+| 2026-05-26 | Implemented task 3.6 (`vgit merge`): designed Fast-Forward, 3-Way Merge, and Merge Conflict animations; created `vgit/commands/merge.py` and `vgit/animations/merge.py`; registered command in CLI. |
 | 2026-04-06 | Implemented task 3.5 (`vgit checkout` / `switch`): created shared animation for branch switching and added `vgit branch -d` deletion animation support. |
 | 2026-04-05 | Implemented task 3.4 (`vgit add`): created animation showing files moving from 'Unstaged' to 'Staged' areas with a scrolling 'trail' icon effect. |
 | 2026-03-23 | Successfully implemented fallback for all unknown Git commands: using a custom `CatchAllGroup`, `vgit <cmd>` now consistently launches the TUI with the 'unsupported' animation. |
